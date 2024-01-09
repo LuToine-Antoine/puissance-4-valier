@@ -1,0 +1,20 @@
+Vérifier les cases :
+[i+2][j+1]
+[i-2][j+1]
+[i+2][j-1]
+[i-2][j-1]
+
+[i+1][j+2]
+[i-1][j+2]
+[i+1][j-2]
+[i-1][j-2]
+
+Perdre :
+-> Si aucune de ces cases dispo = pion bloqué = perdu
+-> Avant chaque tour, on balaye le plateau, quand il y a un pion on regarde autour s'il y a un autre pion de la même couleur, si il n'y en a pas on laisse, sinon on fait la même chose jusqu'a ce qu'il y ait 4-6 pions alignés
+
+
+--> 0 = case vide 
+    1 = case avec le pion
+    2 = case possible
+    3 = case prise
