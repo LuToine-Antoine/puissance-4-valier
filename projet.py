@@ -14,7 +14,7 @@ class Jeu:
 
 
     def set_board_size(self, board_size):
-        ''' Fonction qui permet de selectionner la taille du plateau entre 8 et 12'''
+        ''' Fonction qui permet de selectionner la taille du plateau entre 8 et 12.'''
 
         self.__board_size = int(input("Choisissez une taille de plateau comprise entre 8 et 12 : "))
         while (8 > self.__board_size) or (self.__board_size > 12):
@@ -22,11 +22,12 @@ class Jeu:
         return self.__board_size
 
     def get_board_size(self):
+        '''Permet d'avoir la taille du plateau.'''
         return self.__board_size
 
 
-    #Permet de définir le plateau en fonction de la taille sélectionnée 
     def set_board(self):
+        '''Permet d'initialiser le plateau en fonction de la taille entrée.'''
         self.__board = []
         for i in range(self.__board_size) :
             ligne = []
@@ -36,52 +37,38 @@ class Jeu:
         return self.__board
 
 
-    # Permet d'afficher le tableau
     def get_board(self):
-        for i in range(len(self.__board)):
-            print(*self.__board[i])
+        '''Permet de retourner le tableau.'''
+        return self.__board
 
 
-    def set_nombre_de_pions(self, x):
-        self.__nb_pions = int(input("Nombre de pion a aligner entre 4 et 6 : "))
+    def set_nombre_de_pions_a_aligner(self, x):
+        '''Permet de définir le nombre de pions à aligner pour gagner.'''
+        self.__nb_pions = int(input("Nombre de pion à aligner entre 4 et 6 : "))
 
 
-    def get_nombre_de_pions(self):
+    def get_nombre_de_pions_a_aligner(self):
+        '''Permet de retourner le nombre de pions nécessaire à aligner pour gagner'''
         return self.__nb_pions
 
-
-    # Fonction qui définit les différents status possibles pour une case (cf "note.txt")
-
-    def statut_cases(self,i):
-        if self[i] == 0 :
-            print(".")
-        if self[i] == 1 :
-            print("O")
-        if self[i] == 2 :
-            print("P")
-        if self[i] == 3 :
-            print("X")
-
-
-    # Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
     
     def cases_possibles(self,i,j):
-        poscases = {1 :[i+2][j+1] , 2 : [i-2][j+1], 3 : [i+2][j-1], 4 : [i-2][j-1], 5 : [i+1][j+2], 6 : [i-1][j+2], 7 : [i+1][j-2], 8 : [i-1][j-2]} ## ELLE N'Y SONT PAS TOUTES ! A RAJOUTER
+        '''
+        Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
+        '''
+        poscases = {1 :[i+2][j+1] , 2 : [i-2][j+1], 3 : [i+2][j-1], 4 : [i-2][j-1], 5 : [i+1][j+2], 6 : [i-1][j+2], 7 : [i+1][j-2], 8 : [i-1][j-2]}
         num = 1 
         while num != 8:
             # Case choisie = cases de déplacement et correspond a une case possible
             if self[i][j] == self[poscases] and self[i][j] == 2:
                 return True
-            elif num+1 == 8:
-                return "Plus de cases dispos"
             else :
                 None 
             num +=1
 
 
-    # Fonction qui, si la fontion "cases_possibles" retourne True, vérifie si la case est libre
-
     def deplacement_possible(self, i,j):
+        '''Fonction qui, si la fontion "cases_possibles" retourne True, vérifie si la case est libre'''
         pass
 
 
@@ -95,19 +82,17 @@ class Gui(Jeu) :
 
             self.__canvas = Canvas(self.__root, width=width, height=height)
             self.__rectangles = []
-            for i in range(self.__plateau.get_board()):
+            for i in range(len(self.__plateau.get_board())):
                 self.__rectangles.append([])
-                for j in range(self.__):
-                    color = self.__color_dict[self.__forest.get_tree_in_grid(i,j).get_state()]
-                    rectangle = self.__canvas.create_rectangle(i * self.__size_x, j * self.__size_y,
-                                                            i * self.__size_x + self.__size_x, j * self.__size_y + self.__size_y,
-                                                            fill=color)
+                for j in range(self.__plateau.get_board):
+                    color = self.__color_dict
+                    rectangle = self.__canvas.create_rectangle(i * self.__size_x, j * self.__size_y, i * self.__size_x + self.__size_x, j * self.__size_y + self.__size_y, fill=color)
                     self.__rectangles[i].append(rectangle)
 
 
-            self.__canvas.bind("<Button-1>", self.update_on_clic)
-            self.__canvas.bind("<Button-2>", self.start_auto_fire)
-            self.__canvas.bind("<Button-3>", self.fire_on_clic)
+            #self.__canvas.bind("<Button-1>", self.update_on_clic)
+            #self.__canvas.bind("<Button-2>", self.start_auto_fire)
+            #self.__canvas.bind("<Button-3>", self.fire_on_clic)
 
 
             self.__canvas.pack()
@@ -117,7 +102,8 @@ class Gui(Jeu) :
 
 game = Jeu(8)
 game.set_board_size(8)
-game.set_board()
-game.get_board()
+a = game.set_board()
+b = game.get_board()
+print(a, b , sep="\n")
 
-Gui(20,20,4)
+Gui(200, 200, 8)

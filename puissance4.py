@@ -39,8 +39,7 @@ class Jeu:
 
     def get_board(self):
         '''Permet de retourner le tableau.'''
-        for i in range(len(self.__board)):
-            return self.__board[i]
+        return self.__board
 
 
     def set_nombre_de_pions_a_aligner(self, x):
@@ -85,17 +84,15 @@ class Gui(Jeu) :
             self.__rectangles = []
             for i in range(len(self.__plateau.get_board())):
                 self.__rectangles.append([])
-                for j in range(self.__):
-                    color = self.__color_dict[self.__forest.get_tree_in_grid(i,j).get_state()]
-                    rectangle = self.__canvas.create_rectangle(i * self.__size_x, j * self.__size_y,
-                                                            i * self.__size_x + self.__size_x, j * self.__size_y + self.__size_y,
-                                                            fill=color)
+                for j in range(self.__plateau.get_board):
+                    color = self.__color_dict
+                    rectangle = self.__canvas.create_rectangle(i * self.__size_x, j * self.__size_y, i * self.__size_x + self.__size_x, j * self.__size_y + self.__size_y, fill=color)
                     self.__rectangles[i].append(rectangle)
 
 
-            self.__canvas.bind("<Button-1>", self.update_on_clic)
-            self.__canvas.bind("<Button-2>", self.start_auto_fire)
-            self.__canvas.bind("<Button-3>", self.fire_on_clic)
+            #self.__canvas.bind("<Button-1>", self.update_on_clic)
+            #self.__canvas.bind("<Button-2>", self.start_auto_fire)
+            #self.__canvas.bind("<Button-3>", self.fire_on_clic)
 
 
             self.__canvas.pack()
@@ -105,7 +102,8 @@ class Gui(Jeu) :
 
 game = Jeu(8)
 game.set_board_size(8)
-game.set_board()
-game.get_board()
+a = game.set_board()
+b = game.get_board()
+print(a, b , sep="\n")
 
-Gui(20,20,4)
+Gui(200, 200, 8)
