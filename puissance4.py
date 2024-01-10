@@ -76,8 +76,7 @@ class Gui(Jeu) :
         def __init__(self, width, height, nb_pions):
             self.__root = Tk()
             self.__root.title("La puissance du cavalier")
-            self.__plateau = Jeu()
-            self.__size = self.__plateau.get_board_size()
+            self.__game = Jeu()
             self.__color_dict = {0:"white", 1:"bleu", 2:"red"}
             self.__taille_case = 40
 
@@ -86,13 +85,12 @@ class Gui(Jeu) :
             
 
             #Affiche le plateau
-            plateau = self.__plateau.get_board_size()
-            for i in range(plateau):
-                for j in range(plateau):
+            plateau_size = self.__game.get_board_size()
+            for i in range(plateau_size ):
+                for j in range(plateau_size ):
                     self.__canvas.create_rectangle(i * self.__taille_case, j * self.__taille_case, i *self.__taille_case + self.__taille_case, j * self.__taille_case + self.__taille_case)
+
                     
-
-
             #self.__canvas.bind("<Button-1>", self.update_on_clic)
             #self.__canvas.bind("<Button-2>", self.start_auto_fire)
             #self.__canvas.bind("<Button-3>", self.fire_on_clic)
@@ -100,6 +98,22 @@ class Gui(Jeu) :
             #Lance le GUI
             self.__canvas.pack()
             self.__root.mainloop()
+            
+        def set_pions(self):
+            pions = []
+            plateau = self.__game.get_board()
+            for i in range(len(plateau)):
+                for j in range(len(plateau)):
+                    if plateau[i] == 1 :
+                        oval = self.__canvas.create_oval(5 + self.__taille_case*i + 3 ,5 + 3, self.__taille_case*i +self.__taille_case+5 - 3,self.__taille_case+5 - 3, color = "blue")
+                        pions.append(oval)
+                    if plateau[i] == 2 :
+                        oval = self.__canvas.create_oval(5 + self.__taille_case*i + 3 ,5 + 3, self.__taille_case*i +self.__taille_case+5 - 3,self.__taille_case+5 - 3, color = "red")
+                        pions.append(oval)
+                    
+
+
+
             
 
 game = Jeu(8)
