@@ -16,10 +16,12 @@ class Jeu:
     def set_board_size(self, board_size):
         ''' Fonction qui permet de selectionner la taille du plateau entre 8 et 12.'''
 
+
         self.__board_size = int(input("Choisissez une taille de plateau comprise entre 8 et 12 : "))
         while (8 > self.__board_size) or (self.__board_size > 12):
             self.__board_size = int(input("Taille non prise en charge, veuillez re-saisir une taille de plateau comprise entre 8 et 12 : "))
         return self.__board_size
+
 
     def get_board_size(self):
         '''Permet d'avoir la taille du plateau.'''
@@ -51,7 +53,17 @@ class Jeu:
         '''Permet de retourner le nombre de pions nécessaire à aligner pour gagner'''
         return self.__nb_pions
 
+
+    def set_pion_au_depart(self,):
+        '''Permet de placer le pion où l'on veut en début de partie'''
+        pass
+
     
+    def set_pion_game(self,):
+        '''Permet de placer le pion durant la partie en fonction des case possibles'''
+        pass
+
+
     def cases_possibles(self,i,j):
         '''
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
@@ -114,7 +126,6 @@ class Gui(Jeu) :
 
 
 
-            
 
 game = Jeu(8)
 game.set_board_size(8)
