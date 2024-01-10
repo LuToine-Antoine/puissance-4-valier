@@ -79,31 +79,33 @@ class Gui(Jeu) :
             self.__plateau = Jeu()
             self.__size = self.__plateau.get_board_size()
             self.__color_dict = {0:"white", 1:"bleu", 2:"red"}
+            self.__taille_case = 40
 
+            # Définit la taille de la fenêtre
             self.__canvas = Canvas(self.__root, width=width, height=height)
-            self.__rectangles = []
-            for i in range(len(self.__plateau.get_board())):
-                self.__rectangles.append([])
-                for j in range(self.__plateau.get_board):
-                    color = self.__color_dict
-                    rectangle = self.__canvas.create_rectangle(i * self.__size_x, j * self.__size_y, i * self.__size_x + self.__size_x, j * self.__size_y + self.__size_y, fill=color)
-                    self.__rectangles[i].append(rectangle)
+            
+
+            #Affiche le plateau
+            plateau = self.__plateau.get_board_size()
+            for i in range(plateau):
+                for j in range(plateau):
+                    self.__canvas.create_rectangle(i * self.__taille_case, j * self.__taille_case, i *self.__taille_case + self.__taille_case, j * self.__taille_case + self.__taille_case)
+                    
 
 
             #self.__canvas.bind("<Button-1>", self.update_on_clic)
             #self.__canvas.bind("<Button-2>", self.start_auto_fire)
             #self.__canvas.bind("<Button-3>", self.fire_on_clic)
-
-
+            
+            #Lance le GUI
             self.__canvas.pack()
-
             self.__root.mainloop()
-        pass
+            
 
 game = Jeu(8)
 game.set_board_size(8)
-a = game.set_board()
+game.set_board()
 b = game.get_board()
-print(a, b , sep="\n")
+print(b , sep="\n")
 
-Gui(200, 200, 8)
+Gui(1000, 800, 8)
