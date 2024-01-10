@@ -44,3 +44,11 @@ def statut_cases(self,i):
         print("X")
     if self[i] == 5 :
         print("Z")
+
+--> Voir si on fait pas :
+    0 -> case vide
+    1 -> Pion du joueur 
+    2 -> Cases où le déplacement est possible
+    3 -> Case prise par le joueur 1
+    4 -> Case prise par le joueur 2
+Et on alterne en fonction du joueur .  
