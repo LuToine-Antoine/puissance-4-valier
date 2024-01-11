@@ -1,8 +1,9 @@
 from tkinter import * 
 
 class Pion : 
-    def __init__(self, position, joueur):
-        self.__position = position
+    def __init__(self, x,y, joueur):
+        self.__x = x
+        self.__y = y 
         self.__joueur = joueur
         
 
@@ -52,8 +53,18 @@ class Jeu:
         return self.__nb_pions
 
 
-    def set_pion_au_depart(self,):
+    def set_pion_au_depart(self, joueur):
         '''Permet de placer le pion où l'on veut en début de partie'''
+        i = int(input("Choisir une coordonée i de départ"))
+        j = int(input("Choisir une coordonée j de départ"))
+
+        board = self.__board
+        for i in range(len(board)):
+            for j in range(len(board)):
+                if joueur == 1 :
+                    board[i][j] = 1
+                elif joueur == 2 :
+                    board[i][j] = 2
         pass
 
 
@@ -93,8 +104,8 @@ class Jeu:
             return True
         pass
         
-
-
+    def boucle_jeu(self):
+        pass
 
 class Gui(Jeu) :
         def __init__(self, width, height, nb_pions):
