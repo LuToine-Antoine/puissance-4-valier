@@ -5,60 +5,15 @@ class Pion :
         self.__x = x
         self.__y = y 
         self.__joueur = joueur
-        
-
-class Jeu:
-    def __init__(self, board = [], board_size = 8, nb_pions = 4):
-        self.__board = board
-        self.__nb_pions = nb_pions
-        self.__board_size = board_size
-
-
-    def set_board_size(self, board_size):
-        ''' Fonction qui permet de selectionner la taille du plateau entre 8 et 12.'''
-        self.__board_size = int(input("Choisissez une taille de plateau comprise entre 8 et 12 : "))
-        while (8 > self.__board_size) or (self.__board_size > 12):
-            self.__board_size = int(input("Taille non prise en charge, veuillez re-saisir une taille de plateau comprise entre 8 et 12 : "))
-        return self.__board_size
-
-
-    def get_board_size(self):
-        '''Permet d'avoir la taille du plateau.'''
-        return self.__board_size
-
-
-    def set_board(self):
-        '''Permet d'initialiser le plateau en fonction de la taille entrée.'''
-        self.__board = []
-        for i in range(self.__board_size) :
-            ligne = []
-            self.__board.append(ligne)
-            for i in range(self.__board_size):
-                ligne.append(0)
-        return self.__board
-
-
-    def get_board(self):
-        '''Permet de retourner le tableau.'''
-        return self.__board
-
-
-    def set_nombre_de_pions_a_aligner(self, x):
-        '''Permet de définir le nombre de pions à aligner pour gagner.'''
-        self.__nb_pions = int(input("Nombre de pion à aligner entre 4 et 6 : "))
-
-
-    def get_nombre_de_pions_a_aligner(self):
-        '''Permet de retourner le nombre de pions nécessaire à aligner pour gagner'''
-        return self.__nb_pions
-
+        self.__game = Jeu()
 
     def set_pion_au_depart(self, joueur):
-        '''Permet de placer le pion où l'on veut en début de partie'''
+        '''
+        Permet de placer le pion où l'on veut en début de partie
+        '''
         i = int(input("Choisir une coordonée i de départ"))
         j = int(input("Choisir une coordonée j de départ"))
-
-        board = self.__board
+        board = self.__game.get_board()
         for i in range(len(board)):
             for j in range(len(board)):
                 if joueur == 1 :
@@ -69,7 +24,9 @@ class Jeu:
 
 
     def set_pion_game(self,):
-        '''Permet de placer le pion durant la partie en fonction des case possibles'''
+        '''
+        Permet de placer le pion durant la partie en fonction des case possibles
+        '''
         pass
 
 
@@ -90,16 +47,81 @@ class Jeu:
 
 
     def deplacement_possible(self, i,j):
-        '''Fonction qui, si la fontion "cases_possibles" retourne True, vérifie si la case est libre'''
+        '''
+        Fonction qui, si la fontion "cases_possibles" retourne True, vérifie si la case est libre
+        '''
         if self.cases_possibles() == True and self[i][j] == 3 :
             return True
         else :
             return False
+        
+
+class Jeu:
+    def __init__(self, board = [], board_size = 8, nb_pions = 4):
+        self.__board = board
+        self.__nb_pions = nb_pions
+        self.__board_size = board_size
+
+
+    def set_board_size(self, board_size):
+        '''
+        Fonction qui permet de selectionner la taille du plateau entre 8 et 12.
+        '''
+        self.__board_size = int(input("Choisissez une taille de plateau comprise entre 8 et 12 : "))
+        while (8 > self.__board_size) or (self.__board_size > 12):
+            self.__board_size = int(input("Taille non prise en charge, veuillez re-saisir une taille de plateau comprise entre 8 et 12 : "))
+        return self.__board_size
+
+
+    def get_board_size(self):
+        '''
+        Permet d'avoir la taille du plateau.
+        '''
+        return self.__board_size
+
+
+    def set_board(self):
+        '''
+        Permet d'initialiser le plateau en fonction de la taille entrée.
+        '''
+        self.__board = []
+        for i in range(self.__board_size) :
+            ligne = []
+            self.__board.append(ligne)
+            for i in range(self.__board_size):
+                ligne.append(0)
+        return self.__board
+
+
+    def get_board(self):
+        '''
+        Permet de retourner le tableau.
+        '''
+        return self.__board
+
+
+    def set_nombre_de_pions_a_aligner(self, x):
+        '''
+        Permet de définir le nombre de pions à aligner pour gagner.
+        '''
+        self.__nb_pions = int(input("Nombre de pion à aligner entre 4 et 6 : "))
+
+
+    def get_nombre_de_pions_a_aligner(self):
+        '''
+        Permet de retourner le nombre de pions nécessaire à aligner pour gagner.
+        '''
+        return self.__nb_pions
+
+
+
 
 
     def end_of_game(self):
-        '''Permet de vérifier les conditions d'arrêt'''
-        '''Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases dispo) alors fin de la partie = vrai'''
+        '''
+        Permet de vérifier les conditions d'arrêt
+        '''
+        #Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases dispo) alors fin de la partie = vrai
         if self.deplacement_possible(self) == False:
             return True
         pass
@@ -135,7 +157,7 @@ class Gui(Jeu) :
             self.__root.mainloop()
             
         def set_pions(self, event):
-            '''A ajuster pour faire en sorte d'ajouter un pion quand on clique'''
+            #A ajuster pour faire en sorte d'ajouter un pion quand on clique
             coord_x = event.x//self.__size_x
             coord_y = event.y//self.__size_y
             if self.__forest.get_tree_in_grid(coord_x, coord_y).get_state() == 1 :
