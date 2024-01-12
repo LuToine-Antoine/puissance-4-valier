@@ -1,49 +1,56 @@
 from tkinter import * 
 
 class Pion : 
-    def __init__(self, x,y, joueur):
+    def __init__(self, x, y, joueur):
         self.__x = x
         self.__y = y 
         self.__joueur = joueur
-        self.__game = Jeu()
-
-    def set_pion_au_depart(self, joueur):
-        '''
-        Permet de placer le pion où l'on veut en début de partie
-        '''
-        i = int(input("Choisir une coordonée i de départ"))
-        j = int(input("Choisir une coordonée j de départ"))
-        board = self.__game.get_board()
-        for i in range(len(board)):
-            for j in range(len(board)):
-                if joueur == 1 :
-                    board[i][j] = 1
-                elif joueur == 2 :
-                    board[i][j] = 2
-        pass
 
 
-    def set_pion_game(self,):
+    def set_pion_game(self,x, y):
         '''
         Permet de placer le pion durant la partie en fonction des case possibles
         '''
-        pass
+        self.__x = x
+        self.__y = y
+        return self.__x, self.__y
 
 
     def cases_possibles(self,i,j):
         '''
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
         '''
-        poscases = {1 :[i+2][j+1] , 2 : [i-2][j+1], 3 : [i+2][j-1], 4 : [i-2][j-1], 5 : [i+1][j+2], 6 : [i-1][j+2], 7 : [i+1][j-2], 8 : [i-1][j-2]}
-        num = 1 
-        while num != 8:
-            # Case choisie = cases de déplacement et correspond a une case possible
-            if self[i][j] == self[poscases] :
-                return True
-            else :
-                None 
-            num +=1
-        return False 
+        poscases_zero_hautg = {1 :[i+2, j+1] , 4 : [i+2, j-1], 5 : [i+1, j+2]}
+        poscases_zero_basg = {1 :[i+2, j+1] , 5 : [i+1, j+2]}
+        poscases_zero_basd = {4 : [i-2, j-1], 8 : [i-1, j-2]}
+        poscases_zero_hautd = {2 : [i-2, j+1], 6 : [i-1, j+2]}
+
+        poscases_lignes ={1 :[i+2, j+1] , 3 : [i+2, j-1], 5 : [i+1, j+2],  7 : [i+1, j-2]}
+        poscases_lignes ={1 :[i+2, j+1] , 2 : [i-2, j+1], 5 : [i+1, j+2], 6 : [i-1, j+2]}
+        poscases_lignes ={1 :[i+2, j+1] , 4 : [i-2, j-1],  6 : [i-1, j+2],  8 : [i-1, j-2]}
+        poscases_lignes ={1 :[i+2, j+1] , 2 : [i-2, j+1], 5 : [i+1, j+2], 6 : [i-1, j+2]}
+
+        poscases_un_hautgd = {1 :[i+2, j+1] , 5 : [i+1, j+2], 6 : [i-1, j+2]}
+        poscases_un_hautgg = {1 :[i+2, j+1] , 3 : [i+2, j-1], 5 : [i+1, j+2]}
+
+        poscases_un_basgd = {3 : [i+2, j-1], 7 : [i+1, j-2], 8 : [i-1, j-2]}
+        poscases_un_basgg = {1 :[i+2, j+1] , 3 : [i+2, j-1], 7 : [i+1, j-2]}
+
+        poscases_un_basdg = {4 : [i-2, j-1], 7 : [i+1, j-2], 8 : [i-1, j-2]}
+        poscases_un_basdd = {2 : [i-2, j+1], 4 : [i-2, j-1], 8 : [i-1, j-2]}
+
+        poscases_un_hautdg ={2 : [i-2, j+1], 4 : [i-2, j-1], 6 : [i-1, j+2]}
+        poscases_un_hautdd ={2 : [i-2, j+1], 4 : [i-2, j-1],6 : [i-1, j+2]}
+
+        if i == 0 :
+            if j == 0 :
+
+
+
+                pass
+        poscases_milieu = {1 :[i+2, j+1] , 2 : [i-2, j+1], 3 : [i+2, j-1], 4 : [i-2, j-1], 5 : [i+1, j+2], 6 : [i-1, j+2], 7 : [i+1, j-2], 8 : [i-1, j-2]}
+        # Vérifie si l'élément choisi correspond a l'une des case de déplacement possible (répertoriés dans le dictionnaire)
+        return self[i][j] in poscases_milieu.values()
 
 
     def deplacement_possible(self, i,j):
@@ -55,6 +62,8 @@ class Pion :
         else :
             return False
         
+
+#///////////////////////////////////////////////
 
 class Jeu:
     def __init__(self, board = [], board_size = 8, nb_pions = 4):
@@ -100,7 +109,7 @@ class Jeu:
         return self.__board
 
 
-    def set_nombre_de_pions_a_aligner(self, x):
+    def set_nombre_de_pions_a_aligner(self):
         '''
         Permet de définir le nombre de pions à aligner pour gagner.
         '''
@@ -115,8 +124,6 @@ class Jeu:
 
 
 
-
-
     def end_of_game(self):
         '''
         Permet de vérifier les conditions d'arrêt
@@ -124,33 +131,33 @@ class Jeu:
         #Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases dispo) alors fin de la partie = vrai
         if self.deplacement_possible(self) == False:
             return True
-        pass
+        #elif :
         
-    def boucle_jeu(self):
-        pass
 
+
+#///////////////////////////////////
+    
 class Gui(Jeu) :
-        def __init__(self, width, height, nb_pions):
+        def __init__(self, width = 500, height = 500, nb_pions = 4):
             self.__root = Tk()
             self.__root.title("La puissance du cavalier")
-            self.__game = Jeu()
+            Jeu.__init__(self)
+            self.nb_pion = nb_pions
             self.__color_dict = {0:"white", 1:"bleu", 2:"red"}
-            self.__taille_case = 40
+            self.__taille_case = 50
 
             # Définit la taille de la fenêtre
             self.__canvas = Canvas(self.__root, width=width, height=height)
             
 
             #Affiche le plateau
-            plateau_size = self.__game.get_board_size()
+            plateau_size =self.get_board_size()
             for i in range(plateau_size ):
                 for j in range(plateau_size ):
-                    self.__canvas.create_rectangle(i * self.__taille_case, j * self.__taille_case, i *self.__taille_case + self.__taille_case, j * self.__taille_case + self.__taille_case)
+                    self.__canvas.create_rectangle(i * self.__taille_case+50, j * self.__taille_case+50, i *self.__taille_case + self.__taille_case+50, j * self.__taille_case + self.__taille_case+50)
 
                     
             #self.__canvas.bind("<Button-1>", self.set_pions())
-            #self.__canvas.bind("<Button-2>", self.start_auto_fire)
-            #self.__canvas.bind("<Button-3>", self.fire_on_clic)
             
             #Lance le GUI
             self.__canvas.pack()
@@ -158,8 +165,8 @@ class Gui(Jeu) :
             
         def set_pions(self, event):
             #A ajuster pour faire en sorte d'ajouter un pion quand on clique
-            coord_x = event.x//self.__size_x
-            coord_y = event.y//self.__size_y
+            coord_x = event.x // self.__size_x
+            coord_y = event.y // self.__size_y
             if self.__forest.get_tree_in_grid(coord_x, coord_y).get_state() == 1 :
                 self.__forest.set_tree_state_in_grid(coord_x, coord_y, 2)
                 self.update_grid()
@@ -173,6 +180,9 @@ class Gui(Jeu) :
                     if plateau[i] == 2 :
                         oval = self.__canvas.create_oval(5 + self.__taille_case*i + 3 ,5 + 3, self.__taille_case*i +self.__taille_case+5 - 3,self.__taille_case+5 - 3, color = "red")
                         pions.append(oval)
+
+        def boucle_jeu(self):
+            pass
                     
 
 
@@ -184,4 +194,4 @@ game.set_board()
 b = game.get_board()
 print(b , sep="\n")
 
-Gui(1000, 800, 8)
+Gui(500, 500, 12)
