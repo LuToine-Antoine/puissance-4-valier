@@ -1,7 +1,4 @@
 from tkinter import * 
-from gui import *
-from pion import *
-from jeu import *
 
 class Pion : 
     def __init__(self, x, y, joueur):
