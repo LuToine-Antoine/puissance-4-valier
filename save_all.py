@@ -1,26 +1,26 @@
 from tkinter import * 
+from gui import *
+from pion import *
+from jeu import *
 
 class Pion : 
-    def __init__(self, x,y, joueur):
+    def __init__(self, x, y, joueur):
         self.__x = x
         self.__y = y 
         self.__joueur = joueur
         self.__game = Jeu()
 
-    def set_pion_au_depart(self, joueur):
+    def set_pion_au_depart(self):
         '''
         Permet de placer le pion où l'on veut en début de partie
         '''
-        i = int(input("Choisir une coordonée i de départ"))
-        j = int(input("Choisir une coordonée j de départ"))
         board = self.__game.get_board()
-        for i in range(len(board)):
-            for j in range(len(board)):
-                if joueur == 1 :
-                    board[i][j] = 1
-                elif joueur == 2 :
-                    board[i][j] = 2
-        pass
+        if self.__joueur == 1 :
+            board[self.__x][self.__y] = 1
+            return board
+        elif self.__joueur == 2 :
+            board[self.__x][self.__y] = 2
+            return board
 
 
     def set_pion_game(self,):
@@ -56,6 +56,9 @@ class Pion :
             return False
         
 
+#/////////////////////////////////////////////////////////////////
+        
+
 class Jeu:
     def __init__(self, board = [], board_size = 8, nb_pions = 4):
         self.__board = board
@@ -63,7 +66,7 @@ class Jeu:
         self.__board_size = board_size
 
 
-    def set_board_size(self, board_size):
+    def set_board_size(self):
         '''
         Fonction qui permet de selectionner la taille du plateau entre 8 et 12.
         '''
@@ -92,6 +95,13 @@ class Jeu:
                 ligne.append(0)
         return self.__board
 
+    def update_board(self, i, j, joueur):
+        '''
+        Permet de mettre à jour le plateau en fonction des coups joués.
+        '''
+        print(i,j)
+        self.__board[i][j] = joueur
+        return self.__board
 
     def get_board(self):
         '''
@@ -115,8 +125,6 @@ class Jeu:
 
 
 
-
-
     def end_of_game(self):
         '''
         Permet de vérifier les conditions d'arrêt
@@ -127,7 +135,14 @@ class Jeu:
         pass
         
     def boucle_jeu(self):
-        pass
+        self.set_board_size()
+        self.set_board()
+        while self.end_of_game == False : 
+            self.get_board
+            #self.__pion.self.set_pion_au_depart()
+
+
+#///////////////////////////////////////////////////////////
 
 class Gui(Jeu) :
         def __init__(self, width, height, nb_pions):
@@ -148,16 +163,18 @@ class Gui(Jeu) :
                     self.__canvas.create_rectangle(i * self.__taille_case, j * self.__taille_case, i *self.__taille_case + self.__taille_case, j * self.__taille_case + self.__taille_case)
 
                     
-            self.__canvas.bind("<Button-1>", self.set_pions())
+            #self.__canvas.bind("<Button-1>", self.set_pions())
             #self.__canvas.bind("<Button-2>", self.start_auto_fire)
             #self.__canvas.bind("<Button-3>", self.fire_on_clic)
             
             #Lance le GUI
-            self.__canvas.pack()
+            self.__canvas.pack(padx= 200, pady= 200)
             self.__root.mainloop()
             
         def set_pions(self, event):
-            #A ajuster pour faire en sorte d'ajouter un pion quand on clique
+            '''
+            A ajuster pour faire en sorte d'ajouter un pion quand on clique
+            '''
             coord_x = event.x//self.__size_x
             coord_y = event.y//self.__size_y
             if self.__forest.get_tree_in_grid(coord_x, coord_y).get_state() == 1 :
@@ -179,9 +196,9 @@ class Gui(Jeu) :
 
 
 game = Jeu(8)
-game.set_board_size(8)
-game.set_board()
-b = game.get_board()
-print(b , sep="\n")
+rond = Pion(2,1,1)
+game.set_board_size()
+rond.set_pion_au_depart()
+
 
 Gui(1000, 800, 8)
