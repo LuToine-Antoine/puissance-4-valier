@@ -20,19 +20,25 @@ class Pion :
         '''
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
         '''
-        poscases_zero_hautg = {1 :[i+2, j+1] , 4 : [i+2, j-1], 5 : [i+1, j+2]}
-        poscases_zero_basg = {1 :[i+2, j+1] , 5 : [i+1, j+2]}
-        poscases_zero_basd = {4 : [i-2, j-1], 8 : [i-1, j-2]}
-        poscases_zero_hautd = {2 : [i-2, j+1], 6 : [i-1, j+2]}
 
+        # Les 0
+        poscases_zero_hautg = {1 :[i+2, j+1] , 5 : [i+1, j+2]}
+        poscases_zero_basg = {1 :[i+2, j+1] , 5 : [i+1, j+2]}
+        return self[i][j] in poscases_zero_basg.values()
+        poscases_zero_basd = {4 : [i-2, j-1], 8 : [i-1, j-2]}
+        return self[i][j] in poscases_zero_basd.values()
+        poscases_zero_hautd = {2 : [i-2, j+1], 6 : [i-1, j+2]}
+        
+        # Les lignes
         poscases_lignes ={1 :[i+2, j+1] , 3 : [i+2, j-1], 5 : [i+1, j+2],  7 : [i+1, j-2]}
         poscases_lignes ={1 :[i+2, j+1] , 2 : [i-2, j+1], 5 : [i+1, j+2], 6 : [i-1, j+2]}
         poscases_lignes ={1 :[i+2, j+1] , 4 : [i-2, j-1],  6 : [i-1, j+2],  8 : [i-1, j-2]}
         poscases_lignes ={1 :[i+2, j+1] , 2 : [i-2, j+1], 5 : [i+1, j+2], 6 : [i-1, j+2]}
 
+        # Les 0 + 1
         poscases_un_hautgd = {1 :[i+2, j+1] , 5 : [i+1, j+2], 6 : [i-1, j+2]}
         poscases_un_hautgg = {1 :[i+2, j+1] , 3 : [i+2, j-1], 5 : [i+1, j+2]}
-
+    
         poscases_un_basgd = {3 : [i+2, j-1], 7 : [i+1, j-2], 8 : [i-1, j-2]}
         poscases_un_basgg = {1 :[i+2, j+1] , 3 : [i+2, j-1], 7 : [i+1, j-2]}
 
@@ -42,11 +48,38 @@ class Pion :
         poscases_un_hautdg ={2 : [i-2, j+1], 4 : [i-2, j-1], 6 : [i-1, j+2]}
         poscases_un_hautdd ={2 : [i-2, j+1], 4 : [i-2, j-1],6 : [i-1, j+2]}
 
+        # Haut
+            #Gauche
         if i == 0 :
             if j == 0 :
+                return self[i][j] in poscases_zero_hautg.values()
+            elif j == 1 :
+                return self[i][j] in poscases_un_hautgd.values()
+
+        if i == 1 :
+            if j == 1 :
+                return self[i][j] in poscases_un_hautgg.values()
+            
+
+            #Droite
+        if i == self.board_size():
+            if j == 0 :
+                return self[i][j] in poscases_zero_hautd.values()
+            elif j == 1 :
+                return self[i][j] in poscases_un_hautdd()
+                pass
+
+        if i == self.board_size()-1 :
+            if j == 1 :
+                return self[i][j] in poscases_un_hautdd.values()
+            
+            
 
 
-
+        #Bas
+        
+            #Gauche
+            #Droite
                 pass
         poscases_milieu = {1 :[i+2, j+1] , 2 : [i-2, j+1], 3 : [i+2, j-1], 4 : [i-2, j-1], 5 : [i+1, j+2], 6 : [i-1, j+2], 7 : [i+1, j-2], 8 : [i-1, j-2]}
         # Vérifie si l'élément choisi correspond a l'une des case de déplacement possible (répertoriés dans le dictionnaire)
