@@ -18,6 +18,9 @@ class Pion:
     def get_pion_game(self):
         return self.__x, self.__y
 
+    def get_joueur(self):
+        return self.__joueur
+
     def cases_possibles(self, plateau):
         """
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
@@ -72,22 +75,22 @@ class Pion:
         self.cases_possibles(plateau)
         return (x, y) in self.__possible
 
-    def placement_pion_croix(self, plateau, x, y):
-        if not self.deplacement_possible(plateau, x, y):
-            if self.__joueur == 1:
-                plateau[x][y] = 1
-            else :
-                plateau[x][y] = 2
-
 
 # ///////////////////////////////////////////////
 
 class Jeu(Pion):
-    def __init__(self, board_size = 8, nb_pions=4, x=1, y=1, joueur=1):
+    def __init__(self, board_size=8, nb_pions=4, x=1, y=1, joueur=1):
         self.__board = []
         self.__nb_pions = nb_pions
         self.__board_size = board_size
         Pion.__init__(self, x, y, joueur)
+
+    def get_board_size(self):
+        """
+        Permet d'avoir la taille du plateau.
+        """
+        return self.__board_size
+
 
     def set_board_size(self):
         """
@@ -99,11 +102,11 @@ class Jeu(Pion):
                 input("Taille non prise en charge, veuillez re-saisir une taille de plateau comprise entre 8 et 12 : "))
         return self.__board_size
 
-    def get_board_size(self):
+    def get_board(self):
         """
-        Permet d'avoir la taille du plateau.
+        Permet de retourner le tableau.
         """
-        return self.__board_size
+        return self.__board
 
     def set_board(self):
         """
@@ -117,11 +120,11 @@ class Jeu(Pion):
                 ligne.append(0)
         return self.__board
 
-    def get_board(self):
+    def get_nombre_de_pions_a_aligner(self):
         """
-        Permet de retourner le tableau.
+        Permet de retourner le nombre de pions nécessaire à aligner pour gagner.
         """
-        return self.__board
+        return self.__nb_pions
 
     def set_nombre_de_pions_a_aligner(self):
         """
@@ -129,25 +132,27 @@ class Jeu(Pion):
         """
         self.__nb_pions = int(input("Nombre de pion à aligner entre 4 et 6 : "))
 
-    def get_nombre_de_pions_a_aligner(self):
-        """
-        Permet de retourner le nombre de pions nécessaire à aligner pour gagner.
-        """
-        return self.__nb_pions
+    def placement_pion_croix(self, plateau, x, y):
+        joueur = self.get_joueur()
+        if not self.deplacement_possible(plateau, x, y):
+            if joueur == 1:
+                plateau[x][y] = 1
+            else:
+                plateau[x][y] = 2
 
     def end_of_game(self):
         """
         Permet de vérifier les conditions d'arrêt
         """
         # Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases disponibles) alors, la partie se termine.
-        if not self.deplacement_possible(self.__board, x, y):
-            return True
-        elif :
+        # if not self.deplacement_possible(self.__board, x, y):
+        # return True
+        # elif :
 
 
 # ///////////////////////////////////
 
-class Gui(Jeu):
+class Gui(Jeu, Pion):
     def __init__(self, width=500, height=500, nb_pions=4):
         self.__root = Tk()
         self.__root.title("La puissance du cavalier")
@@ -155,19 +160,21 @@ class Gui(Jeu):
         self.nb_pion = nb_pions
         self.__color_dict = {0: "white", 1: "bleu", 2: "red"}
         self.__taille_case = 50
+        self.__plateau = self.get_board()
 
         # Définit la taille de la fenêtre
         self.__canvas = Canvas(self.__root, width=width, height=height)
 
         # Affiche le plateau
         plateau_size = self.get_board_size()
+        print(plateau_size)
         for i in range(plateau_size):
             for j in range(plateau_size):
                 self.__canvas.create_rectangle(i * self.__taille_case + 50, j * self.__taille_case + 50,
                                                i * self.__taille_case + self.__taille_case + 50,
                                                j * self.__taille_case + self.__taille_case + 50)
 
-        # self.__canvas.bind("<Button-1>", self.set_pions())
+        self.__canvas.bind("<Button-1>", self.set_pions)
 
         # Lance le GUI
         self.__canvas.pack()
@@ -175,8 +182,9 @@ class Gui(Jeu):
 
     def set_pions(self, event):
         # A ajuster pour faire en sorte d'ajouter un pion quand on clique
-        coord_x = event.x // self.__size_x
-        coord_y = event.y // self.__size_y
+        coord_x = event.x // 8
+        coord_y = event.y // 8
+        self.placement_pion_croix(self.__plateau, coord_x, coord_y)
 
     def boucle_jeu(self):
         pass
