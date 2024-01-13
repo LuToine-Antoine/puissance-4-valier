@@ -23,122 +23,72 @@ class Pion:
         # Vérifie si la case est sur le plateau
         if self.__x-2 >= 0 and self.__y-1 >= 0:
             # Vérifie si la case est vide
-            if plateau[self.__x-2][self.__y-1] is 0:
+            if plateau[self.__x-2][self.__y-1] == 0:
                 self.__possible.append(self.__x-2)
                 self.__possible.append(self.__y-1)
 
+
         if self.__x-2 >= 0 and self.__y-1 >= 0:
-            if plateau[self.__x-2][y-1] is None:
-                self._case_possible.append((x-2, y-1))
+            # Vérifie si la case est disponible
+            if plateau[self.__x-2][self.__y-1] == 0:
+                self.__possible.append(self.__x-2)
+                self.__possible.append(self.__y-1)
 
 
-        if x-2 >= 0 and y+1 < len(plateau):
-            if plateau[x-2][y+1] is None:
-                self._case_possible.append((x-2, y+1))
-        if x+2 < len(plateau) and y-1 >= 0:
-            if plateau[x+2][y-1] is None:
-                self._case_possible.append((x+2, y-1))
-        if x+2 < len(plateau) and y+1 < len(plateau):
-            if plateau[x+2][y-1] is None:
-                self._case_possible.append((x+2, y+1))
-        if x-1 >= 0 and y-2 >= 0:
-            if plateau[x-1][y-2] is None:
-                self._case_possible.append((x-1, y-2))
-        if x+1 < len(plateau) and y-2 >= 0:
-            if plateau[x+1][y-2] is None:
-                self._case_possible.append((x+1, y-2))
-        if x-1 >= 0 and y+2 < len(plateau):
-            if plateau[x-1][y+2] is None:
-                self._case_possible.append((x-1, y+2))
-        if x+1 < len(plateau) and y+2 < len(plateau):
-            if plateau[x+1][y+2] is None:
-                self._case_possible.append((x+1, y+2))
-        # Gauche
-            # Haut
-            # Case 0,0 et 0,1
-
-        if self.__x > 0:
-            if self.__y > 0:
-                self.__possible.append([self.__x + 2, self.__y + 1])
-                self.__possible.append([self.__x + 1, self.__y + 2])
-                return self.__possible
-            elif self.__y == 1:
-                self.__possible.append([self.__x + 2, self.__y + 1])
-                self.__possible.append([self.__x + 1, self.__y + 2])
-                self.__possible.append([self.__x + 2, self.__y - 1])
-                return self.__possible
-
-        # Case 1,0
-        elif self.__x < 1:
-            if self.__y < 0:
-                self.__possible.append([self.__x + 2, self.__y + 1])
-                self.__possible.append([self.__x + 1, self.__y + 2])
-                self.__possible.append([self.__x - 1, self.__y + 2])
-                return self.__possible
-
-        # Les 0
-        poscases_zero_basg = {1: [i + 2, j + 1], 5: [i + 1, j + 2]}
-        poscases_zero_basd = {4: [i - 2, j - 1], 8: [i - 1, j - 2]}
-        poscases_zero_hautd = {2: [i - 2, j + 1], 6: [i - 1, j + 2]}
-
-        # Les lignes
-        poscases_lignes = {1: [i + 2, j + 1], 3: [i + 2, j - 1], 5: [i + 1, j + 2], 7: [i + 1, j - 2]}
-        poscases_lignes = {1: [i + 2, j + 1], 2: [i - 2, j + 1], 5: [i + 1, j + 2], 6: [i - 1, j + 2]}
-        poscases_lignes = {1: [i + 2, j + 1], 4: [i - 2, j - 1], 6: [i - 1, j + 2], 8: [i - 1, j - 2]}
-        poscases_lignes = {1: [i + 2, j + 1], 2: [i - 2, j + 1], 5: [i + 1, j + 2], 6: [i - 1, j + 2]}
-
-        # Les 0 + 1
-        poscases_un_hautgd = {1:}
+        if self.__x-2 >= 0 and self.__y+1 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self.__x-2][self.__y+1] == 0:
+                self.__possible.append(self.__x-2)
+                self.__possible.append((self.__y+1))
 
 
-        poscases_un_basgd = {3: [i + 2, j - 1], 7: [i + 1, j - 2], 8: [i - 1, j - 2]}
-        poscases_un_basgg = {1: [i + 2, j + 1], 3: [i + 2, j - 1], 7: [i + 1, j - 2]}
+        if self.__x+2 < len(plateau) and self.__y-1 >= 0:
+            # Vérifie si la case est disponible
+            if plateau[self.__x+2][self.__y-1] == 0:
+                self.__possible.append(self.__x+2)
+                self.__possible.append(self.__y-1)
 
-        poscases_un_basdg = {4: [i - 2, j - 1], 7: [i + 1, j - 2], 8: [i - 1, j - 2]}
-        poscases_un_basdd = {2: [i - 2, j + 1], 4: [i - 2, j - 1], 8: [i - 1, j - 2]}
 
-        poscases_un_hautdg = {2: [i - 2, j + 1], 4: [i - 2, j - 1], 6: [i - 1, j + 2]}
-        poscases_un_hautdd = {2: [i - 2, j + 1], 4: [i - 2, j - 1], 6: [i - 1, j + 2]}
+        if self.__x+2 < len(plateau) and self.__y+1 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self.__x+2][self.__y-1] == 0:
+                self.__possible.append(self.__x+2)
+                self.__possible.append((self.__y+1))
 
-        # Haut
-        # Gauche
-        if i == 0:
-            if j == 0:
-                return self[i][j] in poscases_zero_hautg.values()
-            elif j == 1:
-                return self[i][j] in poscases_un_hautgd.values()
 
-        if i == 1:
-            if j == 1:
-                return self[i][j] in poscases_un_hautgg.values()
+        if self.__x-1 >= 0 and self.__y-2 >= 0:
+            # Vérifie si la case est disponible
+            if plateau[self.__x-1][self.__y-2] == 0:
+                self.__possible.append(self.__x - 1)
+                self.__possible.append((self.__y - 2))
 
-            # Droite
-        if i == self.board_size():
-            if j == 0:
-                return self[i][j] in poscases_zero_hautd.values()
-            elif j == 1:
-                return self[i][j] in poscases_un_hautdd.values()
-                pass
 
-        if i == self.board_size() - 1:
-            if j == 1:
-                return self[i][j] in poscases_un_hautdd.values()
+        if self.__x+1 < len(plateau) and self.__y-2 >= 0:
+            # Vérifie si la case est disponible
+            if plateau[self.__x+1][self.__y-2] is None:
+                self.__possible.append(self.__x + 1)
+                self.__possible.append((self.__y - 2))
 
-                # Bas
 
-                # Gauche
-                # Droite
-                pass
-        poscases_milieu = {1: [i + 2, j + 1], 2: [i - 2, j + 1], 3: [i + 2, j - 1], 4: [i - 2, j - 1],
-                           5: [i + 1, j + 2], 6: [i - 1, j + 2], 7: [i + 1, j - 2], 8: [i - 1, j - 2]}
-        # Vérifie si l'élément choisi correspond a l'une des case de déplacement possible (répertoriés dans le dictionnaire)
-        return self[i][j] in poscases_milieu.values()
+        if self.__x-1 >= 0 and self.__y+2 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self.__x-1][self.__y+2] == 0:
+                self.__possible.append(self.__x - 1)
+                self.__possible.append((self.__y + 2))
 
-    def deplacement_possible(self, i, j):
+
+        if self.__x+1 < len(plateau) and self.__y+2 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self.__x+1][self.__y+2] == 0:
+                self.__possible.append(self.__x + 1)
+                self.__possible.append((self.__y + 2))
+
+
+    def deplacement_possible(self):
         """
         Fonction qui, si la fontion "cases_possibles" retourne True, vérifie si la case est libre
         """
-        if self.cases_possibles(i, j) and self[i][j] == 3:
+        if self.cases_possibles(self.__x, self.__y):
             return True
         else:
             return False
