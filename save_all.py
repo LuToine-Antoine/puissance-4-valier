@@ -6,6 +6,7 @@ class Pion:
         self.__x = x
         self.__y = y
         self.__joueur = joueur
+        self.__possible = []
 
     def set_pion_game(self, x, y):
         """
@@ -15,17 +16,69 @@ class Pion:
         self.__y = y
         return self.__x, self.__y
 
-    def cases_possibles(self, i, j):
+    def cases_possibles(self, plateau):
         """
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
         """
+        # Vérifie si la case est sur le plateau
+        if self.__x-2 >= 0 and self.__y-1 >= 0:
+            # Vérifie si la case est vide
+            if plateau[self.__x-2][self.__y-1] is 0:
+                self.__possible.append(self.__x-2)
+                self.__possible.append(self.__y-1)
+
+        if x-2 >= 0 and y-1 >= 0:
+            if plateau[x-2][y-1] is None:
+                self._case_possible.append((x-2, y-1))
+
+
+        if x-2 >= 0 and y+1 < len(plateau):
+            if plateau[x-2][y+1] is None:
+                self._case_possible.append((x-2, y+1))
+        if x+2 < len(plateau) and y-1 >= 0:
+            if plateau[x+2][y-1] is None:
+                self._case_possible.append((x+2, y-1))
+        if x+2 < len(plateau) and y+1 < len(plateau):
+            if plateau[x+2][y-1] is None:
+                self._case_possible.append((x+2, y+1))
+        if x-1 >= 0 and y-2 >= 0:
+            if plateau[x-1][y-2] is None:
+                self._case_possible.append((x-1, y-2))
+        if x+1 < len(plateau) and y-2 >= 0:
+            if plateau[x+1][y-2] is None:
+                self._case_possible.append((x+1, y-2))
+        if x-1 >= 0 and y+2 < len(plateau):
+            if plateau[x-1][y+2] is None:
+                self._case_possible.append((x-1, y+2))
+        if x+1 < len(plateau) and y+2 < len(plateau):
+            if plateau[x+1][y+2] is None:
+                self._case_possible.append((x+1, y+2))
+        # Gauche
+            # Haut
+            # Case 0,0 et 0,1
+
+        if self.__x > 0:
+            if self.__y > 0:
+                self.__possible.append([self.__x + 2, self.__y + 1])
+                self.__possible.append([self.__x + 1, self.__y + 2])
+                return self.__possible
+            elif self.__y == 1:
+                self.__possible.append([self.__x + 2, self.__y + 1])
+                self.__possible.append([self.__x + 1, self.__y + 2])
+                self.__possible.append([self.__x + 2, self.__y - 1])
+                return self.__possible
+
+        # Case 1,0
+        elif self.__x < 1:
+            if self.__y < 0:
+                self.__possible.append([self.__x + 2, self.__y + 1])
+                self.__possible.append([self.__x + 1, self.__y + 2])
+                self.__possible.append([self.__x - 1, self.__y + 2])
+                return self.__possible
 
         # Les 0
-        poscases_zero_hautg = {1: [i + 2, j + 1], 5: [i + 1, j + 2]}
         poscases_zero_basg = {1: [i + 2, j + 1], 5: [i + 1, j + 2]}
-        return self[i][j] in poscases_zero_basg.values()
         poscases_zero_basd = {4: [i - 2, j - 1], 8: [i - 1, j - 2]}
-        return self[i][j] in poscases_zero_basd.values()
         poscases_zero_hautd = {2: [i - 2, j + 1], 6: [i - 1, j + 2]}
 
         # Les lignes
@@ -35,8 +88,8 @@ class Pion:
         poscases_lignes = {1: [i + 2, j + 1], 2: [i - 2, j + 1], 5: [i + 1, j + 2], 6: [i - 1, j + 2]}
 
         # Les 0 + 1
-        poscases_un_hautgd = {1: [i + 2, j + 1], 5: [i + 1, j + 2], 6: [i - 1, j + 2]}
-        poscases_un_hautgg = {1: [i + 2, j + 1], 3: [i + 2, j - 1], 5: [i + 1, j + 2]}
+        poscases_un_hautgd = {1:}
+
 
         poscases_un_basgd = {3: [i + 2, j - 1], 7: [i + 1, j - 2], 8: [i - 1, j - 2]}
         poscases_un_basgg = {1: [i + 2, j + 1], 3: [i + 2, j - 1], 7: [i + 1, j - 2]}
