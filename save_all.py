@@ -14,6 +14,8 @@ class Pion:
         """
         self.__x = x
         self.__y = y
+
+    def get_pion_game(self):
         return self.__x, self.__y
 
     def cases_possibles(self, plateau):
@@ -24,42 +26,43 @@ class Pion:
 
         if self.__x-2 >= 0 and self.__y-1 >= 0:
             # Vérifie si la case est disponible
-            if plateau[self.__x-2][self.__y-1] == 0:
+            if plateau[self.__x-2][self.__y-1] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
+                # Mise des coordonnées en tuple pour pas qu'elles soient modifiées
                 self.__possible.append((self.__x-2, self.__y-1))
 
         if self.__x-2 >= 0 and self.__y+1 < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self.__x-2][self.__y+1] == 0:
+            if plateau[self.__x-2][self.__y+1] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x-2, self.__y+1))
 
         if self.__x+2 < len(plateau) and self.__y-1 >= 0:
             # Vérifie si la case est disponible
-            if plateau[self.__x+2][self.__y-1] == 0:
+            if plateau[self.__x+2][self.__y-1] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x+2, self.__y-1))
 
         if self.__x+2 < len(plateau) and self.__y+1 < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self.__x+2][self.__y-1] == 0:
+            if plateau[self.__x+2][self.__y-1] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x+2, self.__y+1))
 
         if self.__x-1 >= 0 and self.__y-2 >= 0:
             # Vérifie si la case est disponible
-            if plateau[self.__x-1][self.__y-2] == 0:
+            if plateau[self.__x-1][self.__y-2] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x - 1, self.__y - 2))
 
         if self.__x+1 < len(plateau) and self.__y-2 >= 0:
             # Vérifie si la case est disponible
-            if plateau[self.__x+1][self.__y-2] is None:
+            if plateau[self.__x+1][self.__y-2] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x + 1, self.__y - 2))
 
         if self.__x-1 >= 0 and self.__y+2 < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self.__x-1][self.__y+2] == 0:
+            if plateau[self.__x-1][self.__y+2] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x - 1, self.__y + 2))
 
         if self.__x+1 < len(plateau) and self.__y+2 < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self.__x+1][self.__y+2] == 0:
+            if plateau[self.__x+1][self.__y+2] == 0 or plateau[self.__x-2][self.__y-1] == 3 or plateau[self.__x-2][self.__y-1] == 4:
                 self.__possible.append((self.__x + 1, self.__y + 2))
 
     def deplacement_possible(self, plateau, x, y):
@@ -69,11 +72,18 @@ class Pion:
         self.cases_possibles(plateau)
         return (x, y) in self.__possible
 
+    def placement_pion_croix(self, plateau, x, y):
+        if not self.deplacement_possible(plateau, x, y):
+            if self.__joueur == 1:
+                plateau[x][y] = 1
+            else :
+                plateau[x][y] = 2
+
 
 # ///////////////////////////////////////////////
 
 class Jeu(Pion):
-    def __init__(self, board_size=8, nb_pions=4, x=1, y=1, joueur=1):
+    def __init__(self, board_size = 8, nb_pions=4, x=1, y=1, joueur=1):
         self.__board = []
         self.__nb_pions = nb_pions
         self.__board_size = board_size
@@ -129,10 +139,10 @@ class Jeu(Pion):
         """
         Permet de vérifier les conditions d'arrêt
         """
-        # Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases dispo) alors fin de la partie = vrai
+        # Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases disponibles) alors, la partie se termine.
         if not self.deplacement_possible(self.__board, x, y):
             return True
-        # elif :
+        elif :
 
 
 # ///////////////////////////////////
