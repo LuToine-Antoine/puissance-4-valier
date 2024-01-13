@@ -2,7 +2,7 @@ from tkinter import *
 
 
 class Pion:
-    def __init__(self, x, y, joueur):
+    def __init__(self, x, y, joueur=1):
         self.__x = x
         self.__y = y
         self.__joueur = joueur
@@ -21,84 +21,60 @@ class Pion:
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
         """
         # Vérifie si la case est sur le plateau
-        if self.__x-2 >= 0 and self.__y-1 >= 0:
-            # Vérifie si la case est vide
-            if plateau[self.__x-2][self.__y-1] == 0:
-                self.__possible.append(self.__x-2)
-                self.__possible.append(self.__y-1)
-
 
         if self.__x-2 >= 0 and self.__y-1 >= 0:
             # Vérifie si la case est disponible
             if plateau[self.__x-2][self.__y-1] == 0:
-                self.__possible.append(self.__x-2)
-                self.__possible.append(self.__y-1)
-
+                self.__possible.append((self.__x-2, self.__y-1))
 
         if self.__x-2 >= 0 and self.__y+1 < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self.__x-2][self.__y+1] == 0:
-                self.__possible.append(self.__x-2)
-                self.__possible.append((self.__y+1))
-
+                self.__possible.append((self.__x-2, self.__y+1))
 
         if self.__x+2 < len(plateau) and self.__y-1 >= 0:
             # Vérifie si la case est disponible
             if plateau[self.__x+2][self.__y-1] == 0:
-                self.__possible.append(self.__x+2)
-                self.__possible.append(self.__y-1)
-
+                self.__possible.append((self.__x+2, self.__y-1))
 
         if self.__x+2 < len(plateau) and self.__y+1 < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self.__x+2][self.__y-1] == 0:
-                self.__possible.append(self.__x+2)
-                self.__possible.append((self.__y+1))
-
+                self.__possible.append((self.__x+2, self.__y+1))
 
         if self.__x-1 >= 0 and self.__y-2 >= 0:
             # Vérifie si la case est disponible
             if plateau[self.__x-1][self.__y-2] == 0:
-                self.__possible.append(self.__x - 1)
-                self.__possible.append((self.__y - 2))
-
+                self.__possible.append((self.__x - 1, self.__y - 2))
 
         if self.__x+1 < len(plateau) and self.__y-2 >= 0:
             # Vérifie si la case est disponible
             if plateau[self.__x+1][self.__y-2] is None:
-                self.__possible.append(self.__x + 1)
-                self.__possible.append((self.__y - 2))
-
+                self.__possible.append((self.__x + 1, self.__y - 2))
 
         if self.__x-1 >= 0 and self.__y+2 < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self.__x-1][self.__y+2] == 0:
-                self.__possible.append(self.__x - 1)
-                self.__possible.append((self.__y + 2))
-
+                self.__possible.append((self.__x - 1, self.__y + 2))
 
         if self.__x+1 < len(plateau) and self.__y+2 < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self.__x+1][self.__y+2] == 0:
-                self.__possible.append(self.__x + 1)
-                self.__possible.append((self.__y + 2))
+                self.__possible.append((self.__x + 1, self.__y + 2))
 
-
-    def deplacement_possible(self):
+    def deplacement_possible(self, plateau, x, y):
         """
-        Fonction qui, si la fontion "cases_possibles" retourne True, vérifie si la case est libre
+        Fonction qui, si les coordonnées entrées sont égales aux coordonnées possibles, retourne True si elles sont égales et False sinon.
         """
-        if self.cases_possibles(self.__x, self.__y):
-            return True
-        else:
-            return False
+        self.cases_possibles(plateau)
+        return (x, y) in self.__possible
 
 
 # ///////////////////////////////////////////////
 
-class Jeu:
-    def __init__(self, board=[], board_size=8, nb_pions=4, x = 1, y = 1, joueur = 1):
-        self.__board = board
+class Jeu(Pion):
+    def __init__(self, board_size=8, nb_pions=4, x=1, y=1, joueur=1):
+        self.__board = []
         self.__nb_pions = nb_pions
         self.__board_size = board_size
         Pion.__init__(self, x, y, joueur)
@@ -154,7 +130,7 @@ class Jeu:
         Permet de vérifier les conditions d'arrêt
         """
         # Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases dispo) alors fin de la partie = vrai
-        if not self.deplacement_possible():
+        if not self.deplacement_possible(self.__board, x, y):
             return True
         # elif :
 
@@ -192,13 +168,12 @@ class Gui(Jeu):
         coord_x = event.x // self.__size_x
         coord_y = event.y // self.__size_y
 
-
     def boucle_jeu(self):
         pass
 
 
 game = Jeu(8)
-game.set_board_size(8)
+game.set_board_size()
 game.set_board()
 b = game.get_board()
 print(b, sep="\n")
