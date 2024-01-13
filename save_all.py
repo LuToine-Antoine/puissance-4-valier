@@ -27,8 +27,8 @@ class Pion:
                 self.__possible.append(self.__x-2)
                 self.__possible.append(self.__y-1)
 
-        if x-2 >= 0 and y-1 >= 0:
-            if plateau[x-2][y-1] is None:
+        if self.__x-2 >= 0 and self.__y-1 >= 0:
+            if plateau[self.__x-2][y-1] is None:
                 self._case_possible.append((x-2, y-1))
 
 
