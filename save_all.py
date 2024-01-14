@@ -8,16 +8,6 @@ class Pion:
         self.__joueur = joueur
         self.__possible = []
 
-    def set_pion_game(self, x, y):
-        """
-        Permet de placer le pion durant la partie en fonction des case possibles
-        """
-        self.__x = x
-        self.__y = y
-
-    def get_pion_game(self):
-        return self.__x, self.__y
-
     def get_joueur(self):
         return self.__joueur
 
@@ -94,7 +84,7 @@ class Jeu(Pion):
 
     def set_board_size(self):
         """
-        Fonction qui permet de selectionner la taille du plateau entre 8 et 12.
+        Permet de selectionner la taille du plateau entre 8 et 12.
         """
         self.__board_size = int(input("Choisissez une taille de plateau comprise entre 8 et 12 : "))
         while (8 > self.__board_size) or (self.__board_size > 12):
@@ -113,10 +103,10 @@ class Jeu(Pion):
         Permet d'initialiser le plateau en fonction de la taille entrée.
         """
         self.__board = []
-        for i in range(self.__board_size):
+        for i in range(self.get_board_size()):
             ligne = []
             self.__board.append(ligne)
-            for j in range(self.__board_size):
+            for j in range(self.get_board_size()):
                 ligne.append(0)
         return self.__board
 
@@ -132,9 +122,12 @@ class Jeu(Pion):
         """
         self.__nb_pions = int(input("Nombre de pion à aligner entre 4 et 6 : "))
 
-    def placement_pion_croix(self, plateau, x, y):
+    def placement_pion(self, plateau, x, y):
+        """
+        Permet de placer un pion selon le joueur et si le déplaceent est possible au vu des règles du jeu sur la case sélectionnée.
+        """
         joueur = self.get_joueur()
-        if not self.deplacement_possible(plateau, x, y):
+        if self.deplacement_possible(plateau, x, y) is True:
             if joueur == 1:
                 plateau[x][y] = 1
             else:
@@ -160,7 +153,7 @@ class Gui(Jeu, Pion):
         self.nb_pion = nb_pions
         self.__color_dict = {0: "white", 1: "bleu", 2: "red"}
         self.__taille_case = 50
-        self.__plateau = self.get_board()
+        self.__plateau = self.set_board()
 
         # Définit la taille de la fenêtre
         self.__canvas = Canvas(self.__root, width=width, height=height)
@@ -181,12 +174,18 @@ class Gui(Jeu, Pion):
         self.__root.mainloop()
 
     def set_pions(self, event):
-        # A ajuster pour faire en sorte d'ajouter un pion quand on clique
-        coord_x = event.x // 8
-        coord_y = event.y // 8
-        self.placement_pion_croix(self.__plateau, coord_x, coord_y)
+        """
+        Fonction qui place les pions aux coordonnées du click sur le plateau.
+        """
+        print(self.__plateau)
+        coord_x = (event.x-50) // self.__taille_case
+        coord_y = (event.y-50) // self.__taille_case
+        self.placement_pion(self.__plateau, coord_x, coord_y)
 
     def boucle_jeu(self):
+        """
+        Fonction qui permet au jeu de fonctionner selon les règles, le déroulement du jeu.
+        """
         pass
 
 
