@@ -1314,7 +1314,6 @@ class Jeu:
             return True
 
 
-
 # ///////////////////////////////////
 
 class Gui(Jeu, Pion):
@@ -1380,7 +1379,24 @@ class Gui(Jeu, Pion):
         """
         Fonction qui permet au jeu de fonctionner selon les règles, le déroulement du jeu.
         """
-        pass
+        self.set_board_size()
+        self.set_board()
+        self.set_nombre_de_pions_a_aligner()
+        self.get_nombre_de_pions_a_aligner()
+        self._joueur = 1
+        end_of_game = False
+        while not end_of_game:
+            self.set_pions()
+            self.set_croix()
+            if not self.end_of_game(self._x, self._y):
+                if self._joueur == 1:
+                    self._joueur = 2
+                else:
+                    self._joueur = 1
+            else:
+                end_of_game = True
+        return self._joueur
+
 
 
 Gui(500, 500, 12)
