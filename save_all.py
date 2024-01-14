@@ -1318,13 +1318,14 @@ class Jeu:
 
 class Gui(Jeu, Pion):
     def __init__(self, width=500, height=500, nb_pions=4):
+        self.boucle_jeu()
         self._root = Tk()
         self._root.title("La puissance du cavalier")
         Jeu.__init__(self)
         self.nb_pion = nb_pions
-        # self._color_dict = {0: "white", 1: "bleu", 2: "red"}
         self._taille_case = 500 // self.get_board_size()
-        self._plateau = self.get_board()
+        self.__plateau = self.get_board()
+
 
         # Définit la taille de la fenêtre
         self._canvas = Canvas(self._root, width=width, height=height)
@@ -1351,14 +1352,17 @@ class Gui(Jeu, Pion):
         coord_y = (event.y - 50) // self._taille_case
         self.placement_pion(self._plateau, coord_x, coord_y)
         if self._pion.get_joueur() == 1 and self._pion.deplacement_possible(self._plateau, coord_x, coord_y) is True:
+            self._plateau[coord_x][coord_y] = 4
             self._canvas.create_oval((coord_x+1) * self._taille_case + 2 + 3, (coord_y+1) * self._taille_case + 2 + 3,
                                      (coord_x+1) * self._taille_case + self._taille_case + 2 - 3,
                                      (coord_y+1) * self._taille_case + self._taille_case + 2 - 3, fill="blue")
 
         elif self._pion2.get_joueur() == 2 and self._pion.deplacement_possible(self._plateau, coord_x, coord_y) is True:
+            self._plateau[coord_x][coord_y] = 5
             self._canvas.create_oval((coord_x+1) * self._taille_case + 2 + 3, (coord_y+1) * self._taille_case + 2 + 3,
                                      (coord_x+1) * self._taille_case + self._taille_case + 2 - 3,
                                      (coord_y+1) * self._taille_case + self._taille_case + 2 - 3, fill="red")
+        return coord_x, coord_y
 
     def set_croix(self):
         size = self.get_board_size()
@@ -1384,9 +1388,11 @@ class Gui(Jeu, Pion):
         self.set_nombre_de_pions_a_aligner()
         self.get_nombre_de_pions_a_aligner()
         self._joueur = 1
+        self._x = 0
+        self._y = 0
         end_of_game = False
         while not end_of_game:
-            self.set_pions()
+            self._plateau = self.get_board()
             self.set_croix()
             if not self.end_of_game(self._x, self._y):
                 if self._joueur == 1:
@@ -1399,4 +1405,4 @@ class Gui(Jeu, Pion):
 
 
 
-Gui(500, 500, 12)
+Gui(500, 500)
