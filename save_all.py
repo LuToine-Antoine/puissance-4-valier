@@ -161,8 +161,11 @@ class Jeu:
         """
         Verifie si 5 pions sont aignés.
         """
-        for i in range(self._board):
-            for j in range(self._board):
+        gagner1 = False
+        gagner2 = False
+        for i in range(self._board_size):
+            for j in range(self._board_size):
+
                 # Pions du joueur 1
                 if self._board[i][j] == 4 :
 
@@ -729,6 +732,7 @@ class Jeu:
                                     break
                             if alignement >= self.get_nombre_de_pions_a_aligner():
                                 gagner1 = True
+
 
                 # Pions du joueur 2
                 if self._board[i][j] == 5 :
@@ -1306,8 +1310,8 @@ class Jeu:
         # Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases disponibles) alors, la partie se termine.
         if not self._pion.deplacement_possible(self._board, x, y):
             return True
-        elif:
-            pass
+        elif self.verif_alignement() is True :
+            return True
 
 
 
