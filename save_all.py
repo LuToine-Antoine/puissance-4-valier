@@ -69,10 +69,12 @@ class Pion:
 # ///////////////////////////////////////////////
 
 class Jeu(Pion):
-    def __init__(self, board_size=8, nb_pions=4, x=1, y=1, joueur=1):
+    def __init__(self, nb_pions=4, x=1, y=1, joueur=1):
         self._board = []
         self._nb_pions = nb_pions
-        self._board_size = board_size
+        self._board_size = None
+        self.set_board_size()
+        self.set_board()
         Pion.__init__(self, x, y, joueur)
 
     def get_board_size(self):
@@ -149,8 +151,8 @@ class Gui(Jeu, Pion):
         self._root.title("La puissance du cavalier")
         Jeu.__init__(self)
         self.nb_pion = nb_pions
-        self._color_dict = {0: "white", 1: "bleu", 2: "red"}
-        self._taille_case = 50
+        # self._color_dict = {0: "white", 1: "bleu", 2: "red"}
+        self._taille_case = 500 // self.get_board_size()
         self._plateau = self.get_board()
 
         # Définit la taille de la fenêtre
@@ -160,10 +162,9 @@ class Gui(Jeu, Pion):
         plateau_size = self.get_board_size()
         for i in range(plateau_size):
             for j in range(plateau_size):
-                self._canvas.create_rectangle(i * self._taille_case + 50, j * self._taille_case + 50,
-                                               i * self._taille_case + self._taille_case + 50,
-                                               j * self._taille_case + self._taille_case + 50)
+                self._canvas.create_rectangle(i * self._taille_case + 2, j * self._taille_case + 2, i * self._taille_case + self._taille_case + 2, j * self._taille_case + self._taille_case + 2)
 
+        # Récupère les cliques de l'utilisateur
         self._canvas.bind("<Button-1>", self.set_pions)
 
         # Lance le GUI
