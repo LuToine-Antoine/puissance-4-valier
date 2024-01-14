@@ -8,9 +8,6 @@ class Pion:
         self._joueur = joueur
         self._possible = []
 
-    def get_joueur(self):
-        return self._joueur
-
     def cases_possibles(self, plateau):
         """
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
@@ -57,6 +54,11 @@ class Pion:
             # Vérifie si la case est disponible
             if plateau[self._x+1][self._y+2] == 0 or plateau[self._x-2][self._y-1] == 3 or plateau[self._x-2][self._y-1] == 4:
                 self._possible.append((self._x + 1, self._y + 2))
+
+        for i in range(len(plateau)):
+            for j in range(len(plateau)):
+                if plateau[i][j] == 0:
+                    self._possible.append((self._x, self._y))
 
     def deplacement_possible(self, plateau, x, y):
         """
@@ -126,11 +128,12 @@ class Jeu(Pion):
         """
         Permet de placer un pion selon le joueur et si le déplaceent est possible au vu des règles du jeu sur la case sélectionnée.
         """
-        joueur = self.get_joueur()
+        joueur = self._joueur
+        print(self.deplacement_possible(plateau, x, y))
         if self.deplacement_possible(plateau, x, y) is True:
             if joueur == 1:
                 plateau[x][y] = 1
-            else:
+            elif joueur == 2:
                 plateau[x][y] = 2
 
     def end_of_game(self):
@@ -176,9 +179,17 @@ class Gui(Jeu, Pion):
         Fonction qui place les pions aux coordonnées du click sur le plateau.
         """
         print(self._plateau)
-        coord_x = (event.x-50) // self._taille_case
-        coord_y = (event.y-50) // self._taille_case
+        coord_x = (event.x - 50) // self._taille_case
+        coord_y = (event.y - 50) // self._taille_case
         self.placement_pion(self._plateau, coord_x, coord_y)
+        if self._joueur == 1 and self.deplacement_possible(self._plateau, coord_x, coord_y) is True:
+            self._canvas.create_oval((coord_x+1) * self._taille_case + 2 + 3, (coord_y+1) * self._taille_case + 2 + 3,
+                                     (coord_x+1) * self._taille_case + self._taille_case + 2 - 3,
+                                     (coord_y+1) * self._taille_case + self._taille_case + 2 - 3, fill="blue")
+        elif self._joueur == 2 and self.deplacement_possible(self._plateau, coord_x, coord_y) is True:
+            self._canvas.create_oval((coord_x+1) * self._taille_case + 2 + 3, (coord_y+1) * self._taille_case + 2 + 3,
+                                     (coord_x+1) * self._taille_case + self._taille_case + 2 - 3,
+                                     (coord_y+1) * self._taille_case + self._taille_case + 2 - 3, fill="red")
 
     def boucle_jeu(self):
         """
