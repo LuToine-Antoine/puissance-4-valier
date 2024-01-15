@@ -58,8 +58,7 @@ class Pion:
 
         if self._x + 1 < len(plateau) and self._y + 2 < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self._x + 1][self._y + 2] == 0 or plateau[self._x - 2][self._y - 1] == 3 or plateau[self._x - 2][
-                self._y - 1] == 4:
+            if plateau[self._x + 1][self._y + 2] == 0 or plateau[self._x - 2][self._y - 1] == 3 or plateau[self._x - 2][self._y - 1] == 4:
                 self._possible.append((self._x + 1, self._y + 2))
 
     def deplacement_possible(self, plateau, x, y):
@@ -1324,6 +1323,8 @@ class Gui(Jeu, Pion):
         self.nb_pion = nb_pions
         self._taille_case = 500 // self.get_board_size()
         self._plateau = self.get_board()
+        self._tour = 0
+        self._joueur_en_cours = 0
 
         # Définit la taille de la fenêtre
         self._canvas = Canvas(self._root, width=width, height=height)
@@ -1337,6 +1338,7 @@ class Gui(Jeu, Pion):
                                               j * self._taille_case + self._taille_case + 2)
 
         # Récupère les cliques de l'utilisateur
+
         self._canvas.bind("<Button-1>", self.set_pions)
 
         self.boucle_jeu()
@@ -1352,21 +1354,26 @@ class Gui(Jeu, Pion):
         print(self._plateau)
         coord_x = (event.x - 50) // self._taille_case
         coord_y = (event.y - 50) // self._taille_case
+        self._joueur_en_cours = self._joueur
+        print("en cours", self._joueur_en_cours)
         self.placement_pion(self._plateau, coord_x, coord_y)
-        if self._pion.get_joueur() == 1 and self._pion.deplacement_possible(self._plateau, coord_x, coord_y) is True:
+
+        if self._tour % 2 == 0 and self._pion.deplacement_possible(self._plateau, coord_x, coord_y) is True:
             self._plateau[coord_x][coord_y] = 4
             self._canvas.create_oval((coord_x + 1) * self._taille_case + 2 + 3,
                                      (coord_y + 1) * self._taille_case + 2 + 3,
                                      (coord_x + 1) * self._taille_case + self._taille_case + 2 - 3,
                                      (coord_y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="blue")
-
-        elif self._pion2.get_joueur() == 2 and self._pion.deplacement_possible(self._plateau, coord_x, coord_y) is True:
+            self._tour += 1
+            return coord_x, coord_y, self._joueur_en_cours
+        elif self._tour % 2 != 0 and self._pion.deplacement_possible(self._plateau, coord_x, coord_y) is True:
             self._plateau[coord_x][coord_y] = 5
             self._canvas.create_oval((coord_x + 1) * self._taille_case + 2 + 3,
                                      (coord_y + 1) * self._taille_case + 2 + 3,
                                      (coord_x + 1) * self._taille_case + self._taille_case + 2 - 3,
                                      (coord_y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red")
-        return coord_x, coord_y
+            self._tour += 1
+            return coord_x, coord_y, self._joueur_en_cours
 
     def set_croix(self):
         size = self.get_board_size()
@@ -1392,19 +1399,27 @@ class Gui(Jeu, Pion):
         self.get_nombre_de_pions_a_aligner()
         self._x = 0
         self._y = 0
-        self._joueur = 1
-        if self.end_of_game(self._x, self._y) is False:
-            if self._joueur == 1:
-                self._joueur = 2
-            else:
-                self._joueur = 1
+        self._joueur = 0
+        self._tour = 0
+
+        truc = self.end_of_game(self._x, self._y)
+
+        if truc is False or truc is None:
             self.set_croix()
-            self._plateau = self.get_board()
-            self._root.after(100, self.boucle_jeu)
+            print("joueur", self._joueur)
+            print("voir", self._tour % 2)
+            if self._tour % 2 == 0:
+                self._joueur = 1
+
+                print("tour", self._tour, "joueur en cours",self._joueur_en_cours)
+            else:
+                self._joueur = 2
+
+                print(self._tour)
+            print("Je passe ici")
+            return self._joueur, self._tour
+
         else:
-            end_of_game = True
-
-        return self._joueur
-
+            return self.end_of_game(self._x, self._y)
 
 Gui(500, 500)
