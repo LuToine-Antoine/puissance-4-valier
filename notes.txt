@@ -17,6 +17,5 @@ Perdre :
     0 -> case vide
     1 -> Pion du joueur 1
     2 -> Pion du joueur 2
-    3 -> Cases où le déplacement est possible
-    4 -> Case prise par le joueur 1
-    5 -> Case prise par le joueur 2
+    3 -> Case prise par le joueur 1
+    4 -> Case prise par le joueur 2
