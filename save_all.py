@@ -18,7 +18,6 @@ class Pion:
         """
         Fonction qui regarde si la case sélectionnée par le joueurs est une des cases sur lesquelles le pion peut se déplacer
         """
-
         # Vérifie si la case est sur le plateau pour éviter le out of range.
         # i Haut gauche
         if self._x - 2 >= 0 and self._y - 1 >= 0:
@@ -33,17 +32,17 @@ class Pion:
             if plateau[self._x - 2][self._y + 1] == 0:
                 self._possible.append((self._x - 2, self._y + 1))
 
-        # i Haut droite
-        if self._x + 2 < len(plateau) and self._y - 1 >= 0:
-            # Vérifie si la case est disponible
-            if plateau[self._x + 2][self._y - 1] == 0:
-                self._possible.append((self._x + 2, self._y - 1))
+        # i Haut droite POSE PROBLEME
+        #if self._x + 2 < len(plateau) and self._y - 1 >= 0:
+        #    # Vérifie si la case est disponible
+        #    if plateau[self._x + 2][self._y - 1] == 0:
+        #        self._possible.append((self._x + 2, self._y - 1))
 
-        # i Bas droite
-        if self._x + 2 < len(plateau) and self._y + 1 < len(plateau):
-            # Vérifie si la case est disponible
-            if plateau[self._x + 2][self._y - 1] == 0:
-                self._possible.append((self._x + 2, self._y + 1))
+        # i Bas droite PROBLEME
+       #if self._x + 2 < len(plateau) and self._y + 1 < len(plateau):
+       #    # Vérifie si la case est disponible
+       #    if plateau[self._x + 2][self._y - 1] == 0:
+       #        self._possible.append((self._x + 2, self._y + 1))
 
         # j Haut gauche
         if self._x - 1 >= 0 and self._y - 2 >= 0:
@@ -51,11 +50,11 @@ class Pion:
             if plateau[self._x - 1][self._y - 2] == 0:
                 self._possible.append((self._x - 1, self._y - 2))
 
-        # j Bas gauche
-        if self._x - 1 >= 0 and self._y + 2 < len(plateau):
-            # Vérifie si la case est disponible
-            if plateau[self._x - 1][self._y + 2] == 0:
-                self._possible.append((self._x - 1, self._y + 2))
+        # j Bas gauche PROBLEME
+        #if self._x - 1 >= 0 and self._y + 2 < len(plateau):
+        #    # Vérifie si la case est disponible
+        #    if plateau[self._x - 1][self._y + 2] == 0:
+        #        self._possible.append((self._x - 1, self._y + 2))
 
         # j Haut droite
         if self._x + 1 < len(plateau) and self._y - 2 >= 0:
@@ -63,11 +62,11 @@ class Pion:
             if plateau[self._x + 1][self._y - 2] == 0:
                 self._possible.append((self._x + 1, self._y - 2))
 
-        # j Bas droite
-        if self._x + 1 < len(plateau) and self._y + 2 < len(plateau):
-            # Vérifie si la case est disponible
-            if plateau[self._x + 1][self._y + 2] == 0:
-                self._possible.append((self._x + 1, self._y + 2))
+        # j Bas droite PROBLEME
+       #if self._x + 1 < len(plateau) and self._y + 2 < len(plateau):
+       #    # Vérifie si la case est disponible
+       #    if plateau[self._x + 1][self._y + 2] == 0:
+       #        self._possible.append((self._x + 1, self._y + 2))
 
         if 1  < self._x < len(plateau) and 1<  self._y  < len(plateau):
             if plateau[self._x+2][self._y+1] == 0 :
@@ -93,7 +92,6 @@ class Pion:
 
             if plateau[self._x-1][self._y-2] == 0 :
                 self._possible.append((self._x - 1, self._y - 2))
-
 
 
     def deplacement_possible(self, plateau, x, y):
