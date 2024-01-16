@@ -70,14 +70,15 @@ class Pion:
 
     def deplacement_possible(self, plateau, x, y, tour):
         """
-        Fonction qui renvoit si la case est disponible ou non.
+        Fonction qui renvoit si la case est disponible ou non, si oui renvoit ses coordonnées.
         """
         if tour < 3:
             if plateau[x][y] == '0':
                 return True
             return False
+
         self.cases_possibles(plateau)
-        print(self._possible)
+        # print("coordonnées possibes : ", self._possible)
         return (x, y) in self._possible
 
 
@@ -146,12 +147,14 @@ class Jeu:
         Permet de placer un pion selon le joueur et si le déplaceent est possible au vu des règles du jeu sur la case sélectionnée.
         """
         joueur = self._pion.get_joueur()
-        print("Bonjour", self._pion.deplacement_possible(plateau, x, y, self._tour))
+        print("Peut se placer : ", self._pion.deplacement_possible(plateau, x, y, self._tour))
         if self._pion.deplacement_possible(plateau, x, y, self._tour) is True:
             if joueur == 1:
                 plateau[x][y] = 1
             elif joueur == 2:
                 plateau[x][y] = 2
+        else:
+            print("False test peut pas placer pion")
 
     def placement_croix(self, plateau):
         size = self.get_board_size()
@@ -162,1144 +165,236 @@ class Jeu:
                 elif plateau[i][j] == 2:
                     plateau[i][j] = 4
 
+    def verif_haut(self, i, j, alignement):
+        alignement = 1
+        while alignement != self.get_nombre_de_pions_a_aligner():
+            if self._board[i][j - 1] == 3 or self._board[i][j - 1] == 4:
+                alignement += 1
+            else:
+                break
+        if alignement >= self.get_nombre_de_pions_a_aligner():
+            if self._board[i][j - 1] == 3:
+                gagner1 = True
+            elif self._board[i][j - 1] == 4:
+                gagner2 = True
+
+    def verif_bas(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i][j + 1] == 3 or self._board[i][j + 1] == 4:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                if self._board[i][j + 1] == 3:
+                    gagner1 = True
+                elif self._board[i][j + 1] == 4:
+                    gagner2 = True
+
+    def verif_gauche(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i - 1][j] == 3 or self._board[i - 1][j] == 3:
+                    alignement += 1
+                else:
+                    break
+                if alignement >= self.get_nombre_de_pions_a_aligner():
+                    if self._board[i - 1][j] == 3:
+                        gagner1 = True
+                    elif self._board[i - 1][j] == 4:
+                        gagner2 = True
+
+    def verif_droite(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i + 1][j] == 3 or self._board[i + 1][j + 1] == 4:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                if self._board[i + 1][j] == 3:
+                    gagner1 = True
+                elif self._board[i + 1][j] == 4:
+                    gagner2 = True
+
+    def verif_diaghautdroit(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i + 1][j - 1] == 3 or self._board[i + 1][j - 1] == 4:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                if self._board[i + 1][j - 1] == 3:
+                    gagner1 = True
+                elif self._board[i + 1][j - 1] == 4:
+                    gagner2 = True
+
+    def verif_diaghautgauche(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i - 1][j - 1] == 3 or self._board[i - 1][j - 1] == 4:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                if self._board[i - 1][j - 1] == 3:
+                    gagner1 = True
+                elif self._board[i - 1][j - 1] == 4:
+                    gagner2 = True
+
+    def verif_diagbasdroit(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i + 1][j + 1] == 3 or self._board[i + 1][j + 1] == 4:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                if self._board[i + 1][j + 1] == 3:
+                    gagner1 = True
+                elif self._board[i + 1][j + 1] == 4:
+                    gagner2 = True
+
+    def verif_diagbasgauche(self, i, j, alignement):
+        alignement = 1
+        if self._board[i][j] == 3 or self._board[i][j] == 4:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i - 1][j + 1] == 3 or self._board[i - 1][j + 1] == 4:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                if self._board[i - 1][j + 1] == 3:
+                    gagner1 = True
+                elif self._board[i - 1][j + 1] == 4:
+                    gagner2 = True
+
     def verif_alignement(self):
         """
-        Verifie si le nombre de pions a aligné le sont.
+        Verifie si le nombre de pions a alignÃ© le sont.
         """
-        gagner1 = False
-        gagner2 = False
         for i in range(self._board_size):
             for j in range(self._board_size):
 
-                # Pions du joueur 1
-                if self._board[i][j] == 3:
-
-                    # Coin Haut Gauche
-                    if i == 0:
-                        if j == 0:
-                            # Droite
-                            if self._board[i + 1][j] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Bas
-                            elif self._board[i][j + 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j + 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Diagonale Bas Droite
-                            elif self._board[i + 1][j + 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j + 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Coin Haut Doite
-                    if i == self._board_size:
-                        if j == 0:
-                            # Gauche
-                            if self._board[self._board_size - 1][j] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Bas
-                            elif self._board[self._board_size][j + 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j + 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Diagonale Bas Gauche
-                            elif self._board[self._board_size - 1][j + 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j + 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Coin Bas Gauche
-                    if i == 0:
-                        if j == self._board_size:
-
-                            # Droite
-                            if self._board[i + 1][self._board_size] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Haut
-                            elif self._board[i][self._board_size - 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j - 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Diagonale Haut Droite
-                            elif self._board[i + 1][self._board_size - 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j - 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Coin Bas Doite
-                    if i == self._board_size:
-                        if j == self._board_size:
-
-                            # Gauche
-                            if self._board[self._board_size - 1][self._board_size] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                    if alignement >= self.get_nombre_de_pions_a_aligner():
-                                        gagner1 = True
-
-                            # Haut
-                            elif self._board[self._board_size][self._board_size - 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j + 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                    if alignement >= self.get_nombre_de_pions_a_aligner():
-                                        gagner1 = True
-
-                            # Diagonale Haut Gauche
-                            elif self._board[self._board_size - 1][self._board_size - 1] == 3:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j + 1] == 3:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Ligne Haut
+                # Coin Haut Gauche
+                if i == 0:
                     if j == 0:
-
-                        # Gauche
-                        if self._board[i - 1][j] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Bas
-                        elif self._board[i][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
                         # Droite
-                        elif self._board[i + 1][j] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
+                        alignement = 1
+                        self.verif_droite(i, j, alignement)
+                        # Bas
+                        self.verif_bas(i, j, alignement)
                         # Diagonale Bas Droite
-                        elif self._board[i + 1][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
+                        self.verif_diagbasdroit(i, j, alignement)
 
-                        # Diagonale Bas Gauche
-                        elif self._board[i - 1][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Ligne Gauche
-                    if i == 0:
-                        # Bas
-                        if self._board[i][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Haut
-                        elif self._board[i][self._board_size - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Droite
-                        elif self._board[i + 1][j] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Bas Droite
-                        elif self._board[i + 1][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Haut Droite
-                        elif self._board[i + 1][j - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Ligne Bas
-                    if j == self._board_size:
-                        # Haut
-                        if self._board[i][self._board_size - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Droite
-                        elif self._board[i + 1][self._board_size] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Gauche
-                        elif self._board[i - 1][self._board_size] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Haut Droite
-                        elif self._board[i + 1][self._board_size - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Haut Gauche
-                        elif self._board[i - 1][self._board_size - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Ligne Droite
-                    if i == self._board_size:
-                        # Haut
-                        if self._board[self._board_size][j - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Gauche
-                        elif self._board[self._board_size - 1][j] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Bas
-                        elif self._board[self._board_size][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Bas Gauche
-                        elif self._board[self._board_size - 1][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Haut Gauche
-                        elif self._board[self._board_size - 1][j - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Global
-                    # Gauche
-                    if self._board[i - 1][j] == 3:
-                        if self._board[i + 1][j] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j] == 3:
-                                    alignement += 1
-                                elif self._board[i - 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Droite
-                    if self._board[i + 1][j] == 3:
-                        if self._board[i - 1][j] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j] == 3:
-                                    alignement += 1
-                                elif self._board[i - 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Bas
-                    if self._board[i][j - 1] == 3:
-                        if self._board[i][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 3:
-                                    alignement += 1
-                                elif self._board[i][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Haut
-                    if self._board[i][j + 1] == 3:
-                        if self._board[i][j - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 3:
-                                    alignement += 1
-                                elif self._board[i][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Diag Haut Gauche
-                    if self._board[i - 1][j - 1] == 3:
-                        if self._board[i + 1][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j - 1] == 3:
-                                    alignement += 1
-                                elif self._board[i + 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Diag Haut Droite
-                    if self._board[i + 1][j - 1] == 3:
-                        if self._board[i - 1][j + 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 3:
-                                    alignement += 1
-                                elif self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Diag Bas Gauche
-                    if self._board[i - 1][j + 1] == 3:
-                        if self._board[i + 1][j - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                elif self._board[i + 1][j - 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                    # Diag Bas Droite
-                    if self._board[i + 1][j + 1] == 3:
-                        if self._board[i - 1][j - 1] == 3:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j - 1] == 3:
-                                    alignement += 1
-                                elif self._board[i + 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j + 1] == 3:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                # Pions du joueur 2
-                if self._board[i][j] == 4:
-
-                    # Coin Haut Gauche
-                    if i == 0:
-                        if j == 0:
-                            # Droite
-                            if self._board[i + 1][j] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Bas
-                            elif self._board[i][j + 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j + 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Diagonale Bas Droite
-                            elif self._board[i + 1][j + 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j + 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Coin Haut Doite
-                    if i == self._board_size:
-                        if j == 0:
-                            # Gauche
-                            if self._board[self._board_size - 1][j] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Bas
-                            elif self._board[self._board_size][j + 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j + 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Diagonale Bas Gauche
-                            elif self._board[self._board_size - 1][j + 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j + 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Coin Bas Gauche
-                    if i == 0:
-                        if j == self._board_size:
-
-                            # Droite
-                            if self._board[i + 1][self._board_size] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Haut
-                            elif self._board[i][self._board_size - 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j - 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                            # Diagonale Haut Droite
-                            elif self._board[i + 1][self._board_size - 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i + 1][j - 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Coin Bas Doite
-                    if i == self._board_size:
-                        if j == self._board_size:
-
-                            # Gauche
-                            if self._board[self._board_size - 1][self._board_size] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                    if alignement >= self.get_nombre_de_pions_a_aligner():
-                                        gagner1 = True
-
-                            # Haut
-                            elif self._board[self._board_size][self._board_size - 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i][j + 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                    if alignement >= self.get_nombre_de_pions_a_aligner():
-                                        gagner1 = True
-
-                            # Diagonale Haut Gauche
-                            elif self._board[self._board_size - 1][self._board_size - 1] == 4:
-                                alignement = 1
-                                while alignement != self.get_nombre_de_pions_a_aligner():
-                                    if self._board[i - 1][j + 1] == 4:
-                                        alignement += 1
-                                    else:
-                                        break
-                                if alignement >= self.get_nombre_de_pions_a_aligner():
-                                    gagner1 = True
-
-                    # Ligne Haut
+                # Coin Haut Doite
+                if i == self._board_size:
                     if j == 0:
-
                         # Gauche
-                        if self._board[i - 1][j] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
+                        alignement = 1
+                        self.verif_diaghautdroit(i, j, alignement)
                         # Bas
-                        elif self._board[i][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Droite
-                        elif self._board[i + 1][j] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Bas Droite
-                        elif self._board[i + 1][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
+                        self.verif_bas(i, j, alignement)
                         # Diagonale Bas Gauche
-                        elif self._board[i - 1][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
+                        self.verif_diagbasgauche(i, j, alignement)
 
-                    # Ligne Gauche
-                    if i == 0:
-                        # Bas
-                        if self._board[i][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Haut
-                        elif self._board[i][self._board_size - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Droite
-                        elif self._board[i + 1][j] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Bas Droite
-                        elif self._board[i + 1][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner1 = True
-
-                        # Diagonale Haut Droite
-                        elif self._board[i + 1][j - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                    # Ligne Bas
+                # Coin Bas Gauche
+                if i == 0:
                     if j == self._board_size:
-                        # Haut
-                        if self._board[i][self._board_size - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
                         # Droite
-                        elif self._board[i + 1][self._board_size] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                        # Gauche
-                        elif self._board[i - 1][self._board_size] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                        # Diagonale Haut Droite
-                        elif self._board[i + 1][self._board_size - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                        # Diagonale Haut Gauche
-                        elif self._board[i - 1][self._board_size - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                    # Ligne Droite
-                    if i == self._board_size:
+                        alignement = 1
+                        self.verif_droite(i, j, alignement)
                         # Haut
-                        if self._board[self._board_size][j - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
+                        self.verif_haut(i, j, alignement)
+                        # Diagonale Haut Droite
+                        self.verif_diaghautdroit(i, j, alignement)
 
+                # Coin Bas Doite
+                if i == self._board_size:
+                    if j == self._board_size:
                         # Gauche
-                        elif self._board[self._board_size - 1][j] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                        # Bas
-                        elif self._board[self._board_size][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                        # Diagonale Bas Gauche
-                        elif self._board[self._board_size - 1][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
+                        alignement = 1
+                        self.verif_gauche(i, j, alignement)
+                        # Haut
+                        self.verif_haut(i, j, alignement)
                         # Diagonale Haut Gauche
-                        elif self._board[self._board_size - 1][j - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
+                        self.verif_diaghautgauche(i, j, alignement)
 
-                    # Global
+                # Ligne Haut
+                if j == 0:
                     # Gauche
-                    if self._board[i - 1][j] == 4:
-                        if self._board[i + 1][j] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j] == 4:
-                                    alignement += 1
-                                elif self._board[i - 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                    # Droite
-                    if self._board[i + 1][j] == 4:
-                        if self._board[i - 1][j] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j] == 4:
-                                    alignement += 1
-                                elif self._board[i - 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
+                    alignement = 1
+                    self.verif_gauche(i, j, alignement)
                     # Bas
-                    if self._board[i][j - 1] == 4:
-                        if self._board[i][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 4:
-                                    alignement += 1
-                                elif self._board[i][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
+                    self.verif_bas(i, j, alignement)
+                    # Droite
+                    self.verif_droite(i, j, alignement)
+                    # Diagonale Bas Droite
+                    self.verif_diagbasdroit(i, j, alignement)
+                    # Diagonale Bas Gauche
+                    self.verif_diagbasgauche(i, j, alignement)
 
+                # Ligne Gauche
+                if i == 0:
+                    # Bas
+                    alignement = 1
+                    self.verif_bas(i, j, alignement)
                     # Haut
-                    if self._board[i][j + 1] == 4:
-                        if self._board[i][j - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 4:
-                                    alignement += 1
-                                elif self._board[i][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
+                    self.verif_haut(i, j, alignement)
+                    # Droite
+                    self.verif_droite(i, j, alignement)
+                    # Diagonale Bas Droite
+                    self.verif_diagbasdroit(i, j, alignement)
+                    # Diagonale Haut Droite
+                    self.verif_diaghautdroit(i, j, alignement)
 
-                    # Diag Haut Gauche
-                    if self._board[i - 1][j - 1] == 4:
-                        if self._board[i + 1][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j - 1] == 4:
-                                    alignement += 1
-                                elif self._board[i + 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
+                # Ligne Bas
+                if j == self._board_size:
+                    # Haut
+                    alignement = 1
+                    self.verif_haut(i, j, alignement)
+                    # Droite
+                    self.verif_droite(i, j, alignement)
+                    # Gauche
+                    self.verif_gauche(i, j, alignement)
+                    # Diagonale Haut Droite
+                    self.verif_diaghautdroit(i, j, alignement)
+                    # Diagonale Haut Gauche
+                    self.verif_diaghautgauche(i, j, alignement)
 
-                    # Diag Haut Droite
-                    if self._board[i + 1][j - 1] == 4:
-                        if self._board[i - 1][j + 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 4:
-                                    alignement += 1
-                                elif self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
+                # Ligne Droite
+                if i == self._board_size:
+                    # Haut
+                    alignement = 1
+                    self.verif_haut(i, j, alignement)
+                    # Gauche
+                    self.verif_gauche(i, j, alignement)
+                    # Bas
+                    self.verif_bas(i, j, alignement)
+                    # Diagonale Bas Gauche
+                    self.verif_diagbasgauche(i, j, alignement)
+                    # Diagonale Haut Gauche
+                    self.verif_diaghautgauche(i, j, alignement)
 
-                    # Diag Bas Gauche
-                    if self._board[i - 1][j + 1] == 4:
-                        if self._board[i + 1][j - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                elif self._board[i + 1][j - 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-                    # Diag Bas Droite
-                    if self._board[i + 1][j + 1] == 4:
-                        if self._board[i - 1][j - 1] == 4:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i - 1][j - 1] == 4:
-                                    alignement += 1
-                                elif self._board[i + 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-                        else:
-                            alignement = 1
-                            while alignement != self.get_nombre_de_pions_a_aligner():
-                                if self._board[i + 1][j + 1] == 4:
-                                    alignement += 1
-                                else:
-                                    break
-                            if alignement >= self.get_nombre_de_pions_a_aligner():
-                                gagner2 = True
-
-            return gagner1, gagner2
+                # Global
+                # Gauche
+                else:
+                    alignement = 1
+                    self.verif_gauche()
+                    self.verif_droite()
+                    self.verif_haut()
+                    self.verif_bas()
+                    self.verif_diagbasdroit()
+                    self.verif_diagbasgauche()
+                    self.verif_diaghautdroit()
+                    self.verif_diagbasgauche()
 
     def end_of_game(self, x, y, tour):
         """
@@ -1321,7 +416,7 @@ class Gui(Jeu, Pion):
         self._root = Tk()
         self._root.title("La puissance du cavalier")
         Jeu.__init__(self)
-        self._taille_case = 500 // self.get_board_size()-1
+        self._taille_case = 500 // self.get_board_size() - 1
         self._plateau = self.get_board()
         self.set_nombre_de_pions_a_aligner()
         self.get_nombre_de_pions_a_aligner()
@@ -1336,9 +431,9 @@ class Gui(Jeu, Pion):
         plateau_size = self.get_board_size()
         for i in range(plateau_size):
             for j in range(plateau_size):
-                self._canvas.create_rectangle((i+1) * self._taille_case + 2, (j+1) * self._taille_case + 2,
-                                                (i+1) * self._taille_case + self._taille_case + 2,
-                                                (j+1) * self._taille_case + self._taille_case + 2)
+                self._canvas.create_rectangle((i + 1) * self._taille_case + 2, (j + 1) * self._taille_case + 2,
+                                              (i + 1) * self._taille_case + self._taille_case + 2,
+                                              (j + 1) * self._taille_case + self._taille_case + 2)
 
         # Récupère les cliques de l'utilisateur
 
@@ -1355,7 +450,12 @@ class Gui(Jeu, Pion):
         print(self._plateau)
         self._x = (event.x - 50) // self._taille_case
         self._y = (event.y - 50) // self._taille_case
-        if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size():
+        if self._tour >= 2:
+            if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size() and self.deplacement_possible(self._plateau, self._x, self._y, self._tour) != False:
+                self.placement_pion(self._plateau, self._x, self._y)
+                print(self._x, self._y)
+                self.affichage_rond(self._x, self._y, self._tour)
+        elif 0 <= self._tour < 2:
             self.placement_pion(self._plateau, self._x, self._y)
             print(self._x, self._y)
             self.affichage_rond(self._x, self._y, self._tour)
@@ -1401,16 +501,16 @@ class Gui(Jeu, Pion):
         self.affichage_croix()
 
     def affichage_croix(self):
-        if self._plateau[self._x][self._y] == 3 :
+        if self._plateau[self._x][self._y] == 3:
             self._canvas.create_line((self._x + 1) * self._taille_case,
                                      (self._y + 1) * self._taille_case,
                                      (self._x + 1) * self._taille_case + self._taille_case,
                                      (self._y + 1) * self._taille_case + self._taille_case, fill="blue",
                                      width=5)
-            self._canvas.create_line((self._x +2) * self._taille_case - self._taille_case,
+            self._canvas.create_line((self._x + 2) * self._taille_case - self._taille_case,
                                      (self._y + 1) * self._taille_case + self._taille_case,
                                      (self._x + 2) * self._taille_case,
-                                     (self._y +1) * self._taille_case, fill="blue",width=5)
+                                     (self._y + 1) * self._taille_case, fill="blue", width=5)
 
             return self._plateau[self._x][self._y]
         if self._plateau[self._x][self._y] == 4:
@@ -1434,7 +534,7 @@ class Gui(Jeu, Pion):
         self._x = x
         self._y = y
         if self.end_of_game(self._x, self._y, self._tour) is False or self._tour >= 1:
-            print("sgdquyhjgu",self.deplacement_possible(self._plateau, self._x, self._y, self._tour))
+            print("Placement pion : ", self.deplacement_possible(self._plateau, self._x, self._y, self._tour))
             print("joueur", self._joueur)
             if self._tour % 2 == 0:
                 self._joueur = 1
@@ -1444,8 +544,8 @@ class Gui(Jeu, Pion):
                 print(self._tour)
             print("Je passe ici")
             return self._joueur, self._tour
-
         else:
             return self.end_of_game(self._x, self._y, self._tour)
+
 
 Gui(600, 600)
