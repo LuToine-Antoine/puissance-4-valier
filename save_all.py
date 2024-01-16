@@ -165,121 +165,103 @@ class Jeu:
                 elif plateau[i][j] == 2:
                     plateau[i][j] = 4
 
-    def verif_haut(self, i, j, alignement):
+    def verif_haut(self, i, j, pion_du_joueur):
         alignement = 1
-        while alignement != self.get_nombre_de_pions_a_aligner():
-            if self._board[i][j - 1] == 3 or self._board[i][j - 1] == 4:
-                alignement += 1
-            else:
-                break
-        if alignement >= self.get_nombre_de_pions_a_aligner():
-            if self._board[i][j - 1] == 3:
-                gagner1 = True
-            elif self._board[i][j - 1] == 4:
-                gagner2 = True
-
-    def verif_bas(self, i, j, alignement):
-        alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i][j + 1] == 3 or self._board[i][j + 1] == 4:
+                if self._board[i][j - 1] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
             if alignement >= self.get_nombre_de_pions_a_aligner():
-                if self._board[i][j + 1] == 3:
-                    gagner1 = True
-                elif self._board[i][j + 1] == 4:
-                    gagner2 = True
+                return True
 
-    def verif_gauche(self, i, j, alignement):
+    def verif_bas(self, i, j, pion_du_joueur):
         alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j] == 3 or self._board[i - 1][j] == 3:
+                if self._board[i][j + 1] == pion_du_joueur:
+                    alignement += 1
+                else:
+                    break
+            if alignement >= self.get_nombre_de_pions_a_aligner():
+                return True
+
+    def verif_gauche(self, i, j, pion_du_joueur):
+        alignement = 1
+        if self._board[i][j] == pion_du_joueur:
+            while alignement != self.get_nombre_de_pions_a_aligner():
+                if self._board[i - 1][j] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
                 if alignement >= self.get_nombre_de_pions_a_aligner():
-                    if self._board[i - 1][j] == 3:
-                        gagner1 = True
-                    elif self._board[i - 1][j] == 4:
-                        gagner2 = True
+                    return True
 
-    def verif_droite(self, i, j, alignement):
+    def verif_droite(self, i, j, pion_du_joueur):
         alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j] == 3 or self._board[i + 1][j + 1] == 4:
+                if self._board[i + 1][j] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
             if alignement >= self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j] == 3:
-                    gagner1 = True
-                elif self._board[i + 1][j] == 4:
-                    gagner2 = True
+                return True
 
-    def verif_diaghautdroit(self, i, j, alignement):
+    def verif_diaghautdroit(self, i, j, pion_du_joueur):
         alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j - 1] == 3 or self._board[i + 1][j - 1] == 4:
+                if self._board[i + 1][j - 1] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
             if alignement >= self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j - 1] == 3:
-                    gagner1 = True
-                elif self._board[i + 1][j - 1] == 4:
-                    gagner2 = True
+                return True
 
-    def verif_diaghautgauche(self, i, j, alignement):
+    def verif_diaghautgauche(self, i, j, pion_du_joueur):
         alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j - 1] == 3 or self._board[i - 1][j - 1] == 4:
+                if self._board[i - 1][j - 1] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
             if alignement >= self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j - 1] == 3:
-                    gagner1 = True
-                elif self._board[i - 1][j - 1] == 4:
-                    gagner2 = True
+                return True
 
-    def verif_diagbasdroit(self, i, j, alignement):
+    def verif_diagbasdroit(self, i, j, pion_du_joueur):
         alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j + 1] == 3 or self._board[i + 1][j + 1] == 4:
+                if self._board[i + 1][j + 1] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
             if alignement >= self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j + 1] == 3:
-                    gagner1 = True
-                elif self._board[i + 1][j + 1] == 4:
-                    gagner2 = True
+                return True
 
-    def verif_diagbasgauche(self, i, j, alignement):
+    def verif_diagbasgauche(self, i, j, pion_du_joueur):
         alignement = 1
-        if self._board[i][j] == 3 or self._board[i][j] == 4:
+        if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j + 1] == 3 or self._board[i - 1][j + 1] == 4:
+                if self._board[i - 1][j + 1] == pion_du_joueur:
                     alignement += 1
                 else:
                     break
             if alignement >= self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j + 1] == 3:
-                    gagner1 = True
-                elif self._board[i - 1][j + 1] == 4:
-                    gagner2 = True
+                return True
 
     def verif_alignement(self):
         """
-        Verifie si le nombre de pions a alignÃ© le sont.
+        Verifie si le nombre de pions a aligner le sont.
         """
+        pion_du_joueur = 0
+        if self._tour % 2 == 0:
+            pion_du_joueur = 3
+        else:
+            pion_du_joueur = 4
         for i in range(self._board_size):
             for j in range(self._board_size):
 
@@ -287,114 +269,105 @@ class Jeu:
                 if i == 0:
                     if j == 0:
                         # Droite
-                        alignement = 1
-                        self.verif_droite(i, j, alignement)
+                        self.verif_droite(i, j, pion_du_joueur)
                         # Bas
-                        self.verif_bas(i, j, alignement)
+                        self.verif_bas(i, j, pion_du_joueur)
                         # Diagonale Bas Droite
-                        self.verif_diagbasdroit(i, j, alignement)
+                        self.verif_diagbasdroit(i, j, pion_du_joueur)
 
                 # Coin Haut Doite
                 if i == self._board_size:
                     if j == 0:
                         # Gauche
-                        alignement = 1
-                        self.verif_diaghautdroit(i, j, alignement)
+                        self.verif_diaghautdroit(i, j, pion_du_joueur)
                         # Bas
-                        self.verif_bas(i, j, alignement)
+                        self.verif_bas(i, j, pion_du_joueur)
                         # Diagonale Bas Gauche
-                        self.verif_diagbasgauche(i, j, alignement)
+                        self.verif_diagbasgauche(i, j, pion_du_joueur)
 
                 # Coin Bas Gauche
                 if i == 0:
                     if j == self._board_size:
                         # Droite
-                        alignement = 1
-                        self.verif_droite(i, j, alignement)
+                        self.verif_droite(i, j, pion_du_joueur)
                         # Haut
-                        self.verif_haut(i, j, alignement)
+                        self.verif_haut(i, j, pion_du_joueur)
                         # Diagonale Haut Droite
-                        self.verif_diaghautdroit(i, j, alignement)
+                        self.verif_diaghautdroit(i, j, pion_du_joueur)
 
                 # Coin Bas Doite
                 if i == self._board_size:
                     if j == self._board_size:
                         # Gauche
-                        alignement = 1
-                        self.verif_gauche(i, j, alignement)
+                        self.verif_gauche(i, j, pion_du_joueur)
                         # Haut
-                        self.verif_haut(i, j, alignement)
+                        self.verif_haut(i, j, pion_du_joueur)
                         # Diagonale Haut Gauche
-                        self.verif_diaghautgauche(i, j, alignement)
+                        self.verif_diaghautgauche(i, j, pion_du_joueur)
 
                 # Ligne Haut
                 if j == 0:
                     # Gauche
-                    alignement = 1
-                    self.verif_gauche(i, j, alignement)
+                    self.verif_gauche(i, j, pion_du_joueur)
                     # Bas
-                    self.verif_bas(i, j, alignement)
+                    self.verif_bas(i, j, pion_du_joueur)
                     # Droite
-                    self.verif_droite(i, j, alignement)
+                    self.verif_droite(i, j, pion_du_joueur)
                     # Diagonale Bas Droite
-                    self.verif_diagbasdroit(i, j, alignement)
+                    self.verif_diagbasdroit(i, j, pion_du_joueur)
                     # Diagonale Bas Gauche
-                    self.verif_diagbasgauche(i, j, alignement)
+                    self.verif_diagbasgauche(i, j, pion_du_joueur)
 
                 # Ligne Gauche
                 if i == 0:
                     # Bas
-                    alignement = 1
-                    self.verif_bas(i, j, alignement)
+                    self.verif_bas(i, j, pion_du_joueur)
                     # Haut
-                    self.verif_haut(i, j, alignement)
+                    self.verif_haut(i, j, pion_du_joueur)
                     # Droite
-                    self.verif_droite(i, j, alignement)
+                    self.verif_droite(i, j, pion_du_joueur)
                     # Diagonale Bas Droite
-                    self.verif_diagbasdroit(i, j, alignement)
+                    self.verif_diagbasdroit(i, j, pion_du_joueur)
                     # Diagonale Haut Droite
-                    self.verif_diaghautdroit(i, j, alignement)
+                    self.verif_diaghautdroit(i, j, pion_du_joueur)
 
                 # Ligne Bas
                 if j == self._board_size:
                     # Haut
-                    alignement = 1
-                    self.verif_haut(i, j, alignement)
+                    self.verif_haut(i, j, pion_du_joueur)
                     # Droite
-                    self.verif_droite(i, j, alignement)
+                    self.verif_droite(i, j, pion_du_joueur)
                     # Gauche
-                    self.verif_gauche(i, j, alignement)
+                    self.verif_gauche(i, j, pion_du_joueur)
                     # Diagonale Haut Droite
-                    self.verif_diaghautdroit(i, j, alignement)
+                    self.verif_diaghautdroit(i, j, pion_du_joueur)
                     # Diagonale Haut Gauche
-                    self.verif_diaghautgauche(i, j, alignement)
+                    self.verif_diaghautgauche(i, j, pion_du_joueur)
 
                 # Ligne Droite
                 if i == self._board_size:
                     # Haut
-                    alignement = 1
-                    self.verif_haut(i, j, alignement)
+                    self.verif_haut(i, j, pion_du_joueur)
                     # Gauche
-                    self.verif_gauche(i, j, alignement)
+                    self.verif_gauche(i, j, pion_du_joueur)
                     # Bas
-                    self.verif_bas(i, j, alignement)
+                    self.verif_bas(i, j, pion_du_joueur)
                     # Diagonale Bas Gauche
-                    self.verif_diagbasgauche(i, j, alignement)
+                    self.verif_diagbasgauche(i, j, pion_du_joueur)
                     # Diagonale Haut Gauche
-                    self.verif_diaghautgauche(i, j, alignement)
+                    self.verif_diaghautgauche(i, j, pion_du_joueur)
 
                 # Global
                 # Gauche
                 else:
-                    alignement = 1
-                    self.verif_gauche()
-                    self.verif_droite()
-                    self.verif_haut()
-                    self.verif_bas()
-                    self.verif_diagbasdroit()
-                    self.verif_diagbasgauche()
-                    self.verif_diaghautdroit()
-                    self.verif_diagbasgauche()
+                    self.verif_gauche(i, j, pion_du_joueur)
+                    self.verif_droite(i, j, pion_du_joueur)
+                    self.verif_haut(i, j, pion_du_joueur)
+                    self.verif_bas(i, j, pion_du_joueur)
+                    self.verif_diagbasdroit(i, j, pion_du_joueur)
+                    self.verif_diagbasgauche(i, j, pion_du_joueur)
+                    self.verif_diaghautdroit(i, j, pion_du_joueur)
+                    self.verif_diagbasgauche(i, j, pion_du_joueur)
 
     def end_of_game(self, x, y, tour):
         """
@@ -450,8 +423,9 @@ class Gui(Jeu, Pion):
         print(self._plateau)
         self._x = (event.x - 50) // self._taille_case
         self._y = (event.y - 50) // self._taille_case
+        print("hello", self.deplacement_possible(self._plateau, self._x, self._y, self._tour))
         if self._tour >= 2:
-            if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size() and self.deplacement_possible(self._plateau, self._x, self._y, self._tour) != False:
+            if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size() and self.deplacement_possible(self._plateau, self._x, self._y, self._tour) is True:
                 self.placement_pion(self._plateau, self._x, self._y)
                 print(self._x, self._y)
                 self.affichage_rond(self._x, self._y, self._tour)
@@ -459,6 +433,7 @@ class Gui(Jeu, Pion):
             self.placement_pion(self._plateau, self._x, self._y)
             print(self._x, self._y)
             self.affichage_rond(self._x, self._y, self._tour)
+        return self._tour, self._plateau
 
     def affichage_rond(self, x, y, tour):
         """
