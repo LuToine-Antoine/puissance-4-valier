@@ -1378,7 +1378,8 @@ class Gui(Jeu, Pion):
                                              (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="blue")
                     self._tour += 1
                     self._plateau[self._x][self._y] = 1
-                    return self._plateau
+                    self.set_croix(self._x, self._y)
+                    return self._plateau[self._x][self._y]
                 elif self._tour % 2 != 0:
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
                                              (self._y + 1) * self._taille_case + 2 + 3,
@@ -1386,17 +1387,18 @@ class Gui(Jeu, Pion):
                                              (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red")
                     self._tour += 1
                     self._plateau[self._x][self._y] = 2
-                    return self._plateau
+                    self.set_croix(self._x, self._y)
+                    return self._plateau[self._x][self._y]
             else:
                 if self._tour % 2 == 0 and self._pion.deplacement_possible(self._plateau, self._x, self._y) is True:
-                    self._plateau[self._x][self._y] = 3
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
                                              (self._y + 1) * self._taille_case + 2 + 3,
                                              (self._x + 1) * self._taille_case + self._taille_case + 2 - 3,
                                              (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="blue")
                     self._tour += 1
                     self._plateau[self._x][self._y] = 1
-                    return self._plateau
+                    self.set_croix(self._x, self._y)
+                    return  self._plateau[self._x][self._y]
                 elif self._tour % 2 != 0 and self._pion.deplacement_possible(self._plateau, self._x, self._y) is True:
                     self._plateau[self._x][self._y] = 4
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
@@ -1405,23 +1407,29 @@ class Gui(Jeu, Pion):
                                              (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red")
                     self._tour += 1
                     self._plateau[self._x][self._y] = 2
-                    return self._plateau
-    def set_croix(self):
+                    self.set_croix(self._x, self._y)
+                    return self._plateau[self._x][self._y]
+    def set_croix(self, x, y):
+        self._x = x
+        self._y = y
         size = self.get_board_size()
         for i in range(size):
             for j in range(size):
                 if self._plateau[i][j] == 1:
-                    self._canvas.create_line(i + self._taille_case + 5, j + self._taille_case + 5, i + self._taille_case + 63,
-                                             j + self._taille_case + 63, fill="blue", width=5)
-                    self._canvas.create_line(i + self._taille_case + 63,j + self._taille_case + 5, i + self._taille_case + 5,
-                                             j + self._taille_case + 63, fill="blue", width=5)
                     self._plateau[self._x][self._y] = 3
-                elif self._plateau[i][j] == 2:
-                    self._canvas.create_line(i + self._taille_case + 5, j +self._taille_case + 5, i + self._taille_case + 63,
-                                             j + self._taille_case + 63, fill="red", width=5)
-                    self._canvas.create_line(i + self._taille_case + 63, j + self._taille_case + 5, i + self._taille_case + 5,
-                                             j + self._taille_case + 63, fill="red", width=5)
+                    self._canvas.create_line(self._x + self._taille_case + 10, self._y  + self._taille_case + 10, self._x + self._taille_case + 50,
+                                             self._y + self._taille_case + 50, fill="blue", width=5)
+                    self._canvas.create_line(self._x + self._taille_case + 50, self._y  + self._taille_case + 10, self._x  + self._taille_case + 10,
+                                             self._y + self._taille_case + 50, fill="blue", width=5)
+
+                    return self._plateau[self._x][self._y]
+                elif self._plateau[i][j] ==2:
+                    self._canvas.create_line(self._x  + self._taille_case + 10, self._y  + self._taille_case + 10, self._x  + self._taille_case + 50,
+                                             self._y  + self._taille_case + 50, fill="red", width=5)
+                    self._canvas.create_line(self._x  + self._taille_case + 50, self._y  + self._taille_case + 10, self._x  + self._taille_case + 10,
+                                             self._y  + self._taille_case + 50, fill="red", width=5)
                     self._plateau[self._x][self._y] = 4
+                    return self._plateau[self._x][self._y]
 
     def boucle_jeu(self):
         """
@@ -1433,7 +1441,6 @@ class Gui(Jeu, Pion):
         self._tour = 0
         if self.end_of_game(self._x, self._y, self._tour) is False or self._tour >= 0:
             print("tour", self._tour)
-            self.set_croix()
             print("tour",self._tour)
             print("joueur", self._joueur)
             print("voir", self._tour % 2)
