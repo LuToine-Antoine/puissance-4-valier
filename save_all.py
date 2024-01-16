@@ -14,10 +14,12 @@ class Pion:
         """
         return self._joueur
 
-    def cases_possibles(self, plateau):
+    def cases_possibles(self, x, y, plateau):
         """
         Fonction qui regarde si la case sélectionnée par le joueur est une des cases sur lesquelles le pion peut se déplacer
         """
+        self._x = x
+        self._y = y
         # Vérifie si la case est sur le plateau pour éviter le out of range.
         # i Haut gauche
         if self._x - 2 >= 0 and self._y - 1 >= 0:
@@ -67,6 +69,7 @@ class Pion:
             # Vérifie si la case est disponible
             if plateau[self._x + 1][self._y + 2] == 0:
                 self._possible.append((self._x + 1, self._y + 2))
+        return self._possible
 
     def deplacement_possible(self, plateau, x, y, tour):
         """
@@ -77,7 +80,8 @@ class Pion:
                 return True
             return False
 
-        self.cases_possibles(plateau)
+        print("truc", self.cases_possibles(plateau, x, y))
+        self.cases_possibles(plateau, x, y)
         # print("coordonnées possibes : ", self._possible)
         return (x, y) in self._possible
 
@@ -420,20 +424,22 @@ class Gui(Jeu, Pion):
         """
         Fonction qui place les pions aux coordonnées du click sur le plateau.
         """
-        print(self._plateau)
+        print(*self._plateau, sep="\n")
         self._x = (event.x - 50) // self._taille_case
         self._y = (event.y - 50) // self._taille_case
         print("hello", self.deplacement_possible(self._plateau, self._x, self._y, self._tour))
         if self._tour >= 2:
             if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size() and self.deplacement_possible(self._plateau, self._x, self._y, self._tour) is True:
                 self.placement_pion(self._plateau, self._x, self._y)
-                print(self._x, self._y)
+                print("coord point",self._x, self._y)
                 self.affichage_rond(self._x, self._y, self._tour)
+                self.placement_croix(self._plateau)
         elif 0 <= self._tour < 2:
             self.placement_pion(self._plateau, self._x, self._y)
-            print(self._x, self._y)
+            print("coord point dep : ",self._x, self._y)
             self.affichage_rond(self._x, self._y, self._tour)
-        return self._tour, self._plateau
+            self.placement_croix(self._plateau)
+        return self._x, self._y, self._tour, self._plateau
 
     def affichage_rond(self, x, y, tour):
         """
