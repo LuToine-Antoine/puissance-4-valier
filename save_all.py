@@ -33,16 +33,16 @@ class Pion:
                 self._possible.append((self._x - 2, self._y + 1))
 
         # i Haut droite POSE PROBLEME
-        #if self._x + 2 < len(plateau) and self._y - 1 >= 0:
-        #    # Vérifie si la case est disponible
-        #    if plateau[self._x + 2][self._y - 1] == 0:
-        #        self._possible.append((self._x + 2, self._y - 1))
+        if self._x + 2 < len(plateau) and self._y - 1 >= 0:
+            # Vérifie si la case est disponible
+            if plateau[self._x + 2][self._y - 1] == 0:
+                self._possible.append((self._x + 2, self._y - 1))
 
         # i Bas droite PROBLEME
-       #if self._x + 2 < len(plateau) and self._y + 1 < len(plateau):
-       #    # Vérifie si la case est disponible
-       #    if plateau[self._x + 2][self._y - 1] == 0:
-       #        self._possible.append((self._x + 2, self._y + 1))
+        if self._x + 2 < len(plateau) and self._y + 1 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self._x + 2][self._y - 1] == 0:
+                self._possible.append((self._x + 2, self._y + 1))
 
         # j Haut gauche
         if self._x - 1 >= 0 and self._y - 2 >= 0:
@@ -51,10 +51,10 @@ class Pion:
                 self._possible.append((self._x - 1, self._y - 2))
 
         # j Bas gauche PROBLEME
-        #if self._x - 1 >= 0 and self._y + 2 < len(plateau):
-        #    # Vérifie si la case est disponible
-        #    if plateau[self._x - 1][self._y + 2] == 0:
-        #        self._possible.append((self._x - 1, self._y + 2))
+        if self._x - 1 >= 0 and self._y + 2 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self._x - 1][self._y + 2] == 0:
+                self._possible.append((self._x - 1, self._y + 2))
 
         # j Haut droite
         if self._x + 1 < len(plateau) and self._y - 2 >= 0:
@@ -63,35 +63,11 @@ class Pion:
                 self._possible.append((self._x + 1, self._y - 2))
 
         # j Bas droite PROBLEME
-       #if self._x + 1 < len(plateau) and self._y + 2 < len(plateau):
-       #    # Vérifie si la case est disponible
-       #    if plateau[self._x + 1][self._y + 2] == 0:
-       #        self._possible.append((self._x + 1, self._y + 2))
-
-        if 1  < self._x < len(plateau) and 1<  self._y  < len(plateau):
-            if plateau[self._x+2][self._y+1] == 0 :
-                self._possible.append((self._x +2, self._y + 1))
-
-            if plateau[self._x - 2][self._y + 1] == 0:
-                self._possible.append((self._x - 2, self._y + 1))
-
-            if plateau[self._x+2][self._y-1] == 0 :
-                self._possible.append((self._x + 2, self._y -1))
-
-            if plateau[self._x-2][self._y-1] == 0 :
-                self._possible.append((self._x - 2, self._y - 1))
-
-            if plateau[self._x+1][self._y+2] == 0 :
+        if self._x + 1 < len(plateau) and self._y + 2 < len(plateau):
+            # Vérifie si la case est disponible
+            if plateau[self._x + 1][self._y + 2] == 0:
                 self._possible.append((self._x + 1, self._y + 2))
 
-            if plateau[self._x-1][self._y+2] == 0 :
-                self._possible.append((self._x - 1, self._y + 2))
-
-            if plateau[self._x+1][self._y-2] == 0 :
-                self._possible.append((self._x + 1, self._y - 2))
-
-            if plateau[self._x-1][self._y-2] == 0 :
-                self._possible.append((self._x - 1, self._y - 2))
 
 
     def deplacement_possible(self, plateau, x, y):
@@ -103,10 +79,10 @@ class Pion:
             for j in range(len(plateau)):
                 if plateau[i][j] == 0:
                     _ = True
+                    return _
         if _:
             self.cases_possibles(plateau)
             return (x, y) in self._possible
-
 
 
 
@@ -1366,7 +1342,6 @@ class Gui(Jeu, Pion):
         self._x = 0
         self._y = 0
 
-
         # Définit la taille de la fenêtre
         self._canvas = Canvas(self._root, width=width, height=height)
 
@@ -1397,7 +1372,7 @@ class Gui(Jeu, Pion):
             self.placement_pion(self._plateau, self._x, self._y)
             print(self._x, self._y)
             if self._tour <= 1 :
-                if self._tour % 2 == 0:
+                if self._tour % 2 == 0: # and self._plateau[self._x][self._y] == 0:
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
                                              (self._y + 1) * self._taille_case + 2 + 3,
                                              (self._x + 1) * self._taille_case + self._taille_case + 2 - 3,
@@ -1405,9 +1380,10 @@ class Gui(Jeu, Pion):
                     self._tour += 1
                     self._plateau[self._x][self._y] = 1
                     self.set_croix(self._x, self._y)
-
+                    self.boucle_jeu(self._x, self._y)
                     return self._plateau[self._x][self._y], self._tour
-                elif self._tour % 2 != 0:
+
+                elif self._tour % 2 != 0: # and self._plateau[self._x][self._y] == 0:
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
                                              (self._y + 1) * self._taille_case + 2 + 3,
                                              (self._x + 1) * self._taille_case + self._taille_case + 2 - 3,
@@ -1416,9 +1392,10 @@ class Gui(Jeu, Pion):
                     self._plateau[self._x][self._y] = 2
                     self.set_croix(self._x, self._y)
 
+                    self.boucle_jeu(self._x, self._y)
                     return self._plateau[self._x][self._y], self._tour
             else:
-                if self._tour % 2 == 0 and self._pion.deplacement_possible(self._plateau, self._x, self._y) is True:
+                if self._tour % 2 == 0 and self._pion.deplacement_possible(self._plateau, self._x, self._y) is True : #and self._plateau[self._x][self._y] == 0:
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
                                              (self._y + 1) * self._taille_case + 2 + 3,
                                              (self._x + 1) * self._taille_case + self._taille_case + 2 - 3,
@@ -1426,9 +1403,10 @@ class Gui(Jeu, Pion):
                     self._tour += 1
                     self._plateau[self._x][self._y] = 1
                     self.set_croix(self._x, self._y)
-
+                    self.boucle_jeu(self._x, self._y)
                     return  self._plateau[self._x][self._y], self._tour
-                elif self._tour % 2 != 0 and self._pion.deplacement_possible(self._plateau, self._x, self._y) is True:
+
+                elif self._tour % 2 != 0 and self._pion.deplacement_possible(self._plateau, self._x, self._y) is True : #and self._plateau[self._x][self._y] == 0:
                     self._plateau[self._x][self._y] = 4
                     self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
                                              (self._y + 1) * self._taille_case + 2 + 3,
@@ -1437,48 +1415,50 @@ class Gui(Jeu, Pion):
                     self._tour += 1
                     self._plateau[self._x][self._y] = 2
                     self.set_croix(self._x, self._y)
+                    self.boucle_jeu(self._x, self._y)
                     return self._plateau[self._x][self._y] ,self._tour
-        self.boucle_jeu(self._x, self._y)
     def set_croix(self, x, y):
         self._x = x
         self._y = y
         size = self.get_board_size()
-    #if self.placement_pion(self._x, self._y) == True :
+        #if self.placement_pion(self._x, self._y) == True:
         for i in range(size):
-            for j in range(size):
-                if self._plateau[i][j] == 1:
-                    self._plateau[self._x][self._y] = 3
-                    self._canvas.create_line((self._x + 1) * self._taille_case ,
-                                             (self._y + 1) * self._taille_case ,
-                                             (self._x + 1) * self._taille_case + self._taille_case ,
-                                             (self._y + 1) * self._taille_case + self._taille_case , fill="blue",
-                                             width=5)
-                    self._canvas.create_line((self._x +2) * self._taille_case - self._taille_case ,
-                                             (self._y + 1) * self._taille_case + self._taille_case ,
-                                             (self._x + 2) * self._taille_case ,
-                                             (self._y +1) * self._taille_case, fill="blue",width=5)
+                for j in range(size):
+                    if self._plateau[i][j] == 1:
+                        self._plateau[self._x][self._y] = 3
+                        self._canvas.create_line((self._x + 1) * self._taille_case ,
+                                                 (self._y + 1) * self._taille_case ,
+                                                 (self._x + 1) * self._taille_case + self._taille_case ,
+                                                 (self._y + 1) * self._taille_case + self._taille_case , fill="blue",
+                                                 width=5)
+                        self._canvas.create_line((self._x +2) * self._taille_case - self._taille_case ,
+                                                 (self._y + 1) * self._taille_case + self._taille_case ,
+                                                 (self._x + 2) * self._taille_case ,
+                                                 (self._y +1) * self._taille_case, fill="blue",width=5)
 
-                    return self._plateau[self._x][self._y]
-                elif self._plateau[i][j] == 2:
-                    self._canvas.create_line((self._x + 1) * self._taille_case,
-                                             (self._y + 1) * self._taille_case,
-                                             (self._x + 1) * self._taille_case + self._taille_case,
-                                             (self._y + 1) * self._taille_case + self._taille_case, fill="red",
-                                             width=5)
-                    self._canvas.create_line((self._x + 2) * self._taille_case - self._taille_case,
-                                             (self._y + 1) * self._taille_case + self._taille_case,
-                                             (self._x + 2) * self._taille_case,
-                                             (self._y + 1) * self._taille_case, fill="red", width=5)
-                    self._plateau[self._x][self._y] = 4
-                    return self._plateau[self._x][self._y]
+                        return self._plateau[self._x][self._y]
+                    elif self._plateau[i][j] == 2:
+                        self._canvas.create_line((self._x + 1) * self._taille_case,
+                                                 (self._y + 1) * self._taille_case,
+                                                 (self._x + 1) * self._taille_case + self._taille_case,
+                                                 (self._y + 1) * self._taille_case + self._taille_case, fill="red",
+                                                 width=5)
+                        self._canvas.create_line((self._x + 2) * self._taille_case - self._taille_case,
+                                                 (self._y + 1) * self._taille_case + self._taille_case,
+                                                 (self._x + 2) * self._taille_case,
+                                                 (self._y + 1) * self._taille_case, fill="red", width=5)
+
+                        self._plateau[self._x][self._y] = 4
+                        return self._plateau[self._x][self._y]
 
     def boucle_jeu(self, x, y):
         """
         Fonction qui permet au jeu de fonctionner selon les règles, le déroulement du jeu.
         """
-        self._x =x
+        self._x = x
         self._y = y
         if self.end_of_game(self._x, self._y, self._tour) is False or self._tour >= 1:
+            print("sgdquyhjgu",self.deplacement_possible(self._plateau, self._x, self._y))
             print("joueur", self._joueur)
             if self._tour % 2 == 0:
                 self._joueur = 1
