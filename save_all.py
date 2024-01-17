@@ -18,70 +18,81 @@ class Pion:
         """
         Fonction qui regarde si la case sélectionnée par le joueur est une des cases sur lesquelles le pion peut se déplacer
         """
+        self._possible = []
         self._x = x
         self._y = y
         # Vérifie si la case est sur le plateau pour éviter le out of range.
         # i Haut gauche
-        if self._x - 2 >= 0 and self._y - 1 >= 0:
+        if (self._x - 2) >= 0 and (self._y - 1) >= 0:
             # Vérifie si la case est vide
             if plateau[self._x - 2][self._y - 1] == 0:
                 # Mise des coordonnées en tuple pour pas qu'elles soient modifiées.
                 self._possible.append((self._x - 2, self._y - 1))
+                return True
 
         # i Bas gauche
-        if self._x - 2 >= 0 and self._y + 1 < len(plateau):
+        if (self._x - 2) >= 0 and (self._y + 1) < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self._x - 2][self._y + 1] == 0:
                 self._possible.append((self._x - 2, self._y + 1))
+                return True
 
         # i Haut droite
-        if self._x + 2 < len(plateau) and self._y - 1 >= 0:
+        if (self._x + 2) < len(plateau) and (self._y - 1) >= 0:
             # Vérifie si la case est disponible
             if plateau[self._x + 2][self._y - 1] == 0:
                 self._possible.append((self._x + 2, self._y - 1))
+                return True
 
         # i Bas droite
-        if self._x + 2 < len(plateau) and self._y + 1 < len(plateau):
+        if (self._x + 2) < len(plateau) and (self._y + 1) < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self._x + 2][self._y + 1] == 0:
                 self._possible.append((self._x + 2, self._y + 1))
+                return True
 
         # j Haut gauche
-        if self._x - 1 >= 0 and self._y - 2 >= 0:
+        if (self._x - 1) >= 0 and (self._y - 2) >= 0:
             # Vérifie si la case est disponible
             if plateau[self._x - 1][self._y - 2] == 0:
                 self._possible.append((self._x - 1, self._y - 2))
+                return True
 
-        # j Bas gauche PROBLEME
-        if self._x - 1 >= 0 and self._y + 2 < len(plateau):
+        # j Bas gauche
+        if (self._x - 1) >= 0 and (self._y + 2) < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self._x - 1][self._y + 2] == 0:
                 self._possible.append((self._x - 1, self._y + 2))
+                return True
 
         # j Haut droite
-        if self._x + 1 < len(plateau) and self._y - 2 >= 0:
+        if (self._x + 1) < len(plateau) and (self._y - 2) >= 0:
             # Vérifie si la case est disponible
             if plateau[self._x + 1][self._y - 2] == 0:
                 self._possible.append((self._x + 1, self._y - 2))
+                return True
 
-        # j Bas droite PROBLEME
-        if self._x + 1 < len(plateau) and self._y + 2 < len(plateau):
+        # j Bas droite
+
+        if (self._x + 1) < len(plateau) and (self._y + 2) < len(plateau):
             # Vérifie si la case est disponible
             if plateau[self._x + 1][self._y + 2] == 0:
                 self._possible.append((self._x + 1, self._y + 2))
+                return True
         return self._possible
 
     def deplacement_possible(self, plateau, x, y, tour):
         """
         Fonction qui renvoit si la case est disponible ou non, si oui renvoit ses coordonnées.
         """
-        if tour < 3:
+        self.cases_possibles(x, y, plateau)
+        if tour < 2:
             if plateau[x][y] == '0':
                 return True
             return False
+        if (x, y) in self._possible:
+            return True
 
-        print("truc", self.cases_possibles(plateau, x, y))
-        self.cases_possibles(plateau, x, y)
         # print("coordonnées possibes : ", self._possible)
         return (x, y) in self._possible
 
@@ -94,6 +105,8 @@ class Jeu:
         self.set_board_size()
         self.set_board()
         self._tour = 0
+        self._x = 0
+        self._y = 0
         # Pour combinaison
         self._pion = Pion(1, 1, 1)
         self._pion2 = Pion(1, 1, 2)
@@ -112,7 +125,6 @@ class Jeu:
         while (8 > self._board_size) or (self._board_size > 12):
             self._board_size = int(
                 input("Taille non prise en charge, veuillez re-saisir une taille de plateau comprise entre 8 et 12 : "))
-
 
     def set_board(self):
         """
@@ -155,7 +167,7 @@ class Jeu:
         self._y = y
         joueur = self._pion.get_joueur()
         print("Peut se placer : ", self._pion.deplacement_possible(plateau, self._x, self._y, self._tour))
-        if self._pion.deplacement_possible(plateau, self._x, self._y, self._tour) is True :
+        if self._pion.deplacement_possible(plateau, self._x, self._y, self._tour) is True:
             if joueur == 1:
                 plateau[self._x][self._y] = 1
             elif joueur == 2:
@@ -418,7 +430,7 @@ class Gui(Jeu, Pion):
         # Récupère les cliques de l'utilisateur
 
         self._canvas.bind("<Button-1>", self.set_pions)
-
+        self.boucle_jeu(self._x, self._y)
         # Lance le GUI
         self._canvas.pack()
         self._root.mainloop()
@@ -429,18 +441,17 @@ class Gui(Jeu, Pion):
         """
         self._x = (event.x - 50) // self._taille_case
         self._y = (event.y - 50) // self._taille_case
-        print("hello", self.deplacement_possible(self._plateau, self._x, self._y, self._tour))
-        if self._tour >= 2:
-            if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size() and self.deplacement_possible(self._plateau, self._x, self._y, self._tour) is True:
+        print("hello", self._pion.deplacement_possible(self._plateau, self._x, self._y, self._tour))
+        if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size():
+            if self._tour >= 2:
+                if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size() and self._pion.deplacement_possible(self._plateau, self._x, self._y, self._tour) is True:
+                    self.placement_pion(self._plateau, self._x, self._y)
+                    self.affichage_rond(self._x, self._y, self._tour)
+            elif 0 <= self._tour <= 1:
                 self.placement_pion(self._plateau, self._x, self._y)
                 self.affichage_rond(self._x, self._y, self._tour)
-                self.placement_croix(self._plateau)
-        elif 0 <= self._tour < 2:
-            self.placement_pion(self._plateau, self._x, self._y)
-            self.affichage_rond(self._x, self._y, self._tour)
-            self.placement_croix(self._plateau)
-        print(*self._plateau, sep="\n")
-        return self._x, self._y, self._tour, self._plateau
+            print(*self._plateau, sep="\n")
+            return self._x, self._y, self._tour, self._plateau
 
     def affichage_rond(self, x, y, tour):
         """
@@ -457,7 +468,6 @@ class Gui(Jeu, Pion):
                                      (self._x + 1) * self._taille_case + self._taille_case + 2 - 3, fill="blue")
             self._tour += 1
             self._plateau[self._x][self._y] = 1
-            self.boucle_jeu(self._x, self._y)
             return self._plateau[self._x][self._y], self._tour
 
         elif self._tour % 2 != 0 and self._plateau[self._x][self._y] == 0:
@@ -467,21 +477,21 @@ class Gui(Jeu, Pion):
                                      (self._x + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red")
             self._tour += 1
             self._plateau[self._x][self._y] = 2
-            self.boucle_jeu(self._x, self._y)
             return self._plateau[self._x][self._y], self._tour
 
     def set_croix(self, x, y):
         self._x = x
         self._y = y
         size = self.get_board_size()
-        if self.placement_pion(self._x, self._y):
-            for i in range(size):
-                for j in range(size):
-                    if self._plateau[i][j] == 1:
-                        self._plateau[self._x][self._y] = 3
-                    elif self._plateau[i][j] == 2:
-                        self._plateau[self._x][self._y] = 4
-        self.affichage_croix()
+        for i in range(size):
+            for j in range(size):
+                if self._plateau[i][j] == 1:
+                    self._plateau[self._x][self._y] = 3
+                    self.affichage_croix()
+                elif self._plateau[i][j] == 2:
+                    self._plateau[self._x][self._y] = 4
+                    self.affichage_croix()
+        return self._plateau[self._x][self._y]
 
     def affichage_croix(self):
         if self._plateau[self._x][self._y] == 3:
@@ -517,7 +527,8 @@ class Gui(Jeu, Pion):
         self._x = x
         self._y = y
         if self.end_of_game(self._x, self._y, self._tour) is False or self._tour >= 1:
-            print("Placement pion : ", self.deplacement_possible(self._plateau, self._x, self._y, self._tour))
+            self.placement_croix(self._plateau)
+            print("Placement pion : ", self._pion.deplacement_possible(self._plateau, self._x, self._y, self._tour))
             print("joueur", self._joueur)
             if self._tour % 2 == 0:
                 self._joueur = 1
