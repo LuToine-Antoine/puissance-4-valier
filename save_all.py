@@ -36,6 +36,7 @@ class Jeu:
         self._tour = 0
         self._x = 0
         self._y = 0
+        self._possible = []
         self._joueur = 1
         # Pour combinaison
         self._pion1 = Pion(0, 0, 1)
@@ -93,89 +94,88 @@ class Jeu:
         """
         Fonction qui regarde si la case sélectionnée par le joueur est une des cases sur lesquelles le pion peut se déplacer
         """
-        self._x = x
-        self._y = y
-        print("cases possibles ", self._x, self._y)
+        print("cases possibles ", x, y)
 
+        possible = []
         # Vérifie si la case est sur le plateau pour éviter le out of range.
         # x Haut gauche
-        if (self._x - 2) >= 0 and (self._y - 1) >= 0:
+        if (x - 2) >= 0 and (y - 1) >= 0:
             # Vérifie si la case est vide
-            if plateau[self._x - 2][self._y - 1] == 0:
-                return True
-            else:
-                return False
+            if plateau[x - 2][y - 1] == 0:
+                possible.append((x - 2, y - 1))
 
         # x Bas gauche
-        elif (self._x - 2) >= 0 and (self._y + 1) < len(plateau):
+        if (x - 2) >= 0 and (y + 1) < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self._x - 2][self._y + 1] == 0:
-                return True
-            else:
-                return False
+            if plateau[x - 2][y + 1] == 0:
+                possible.append((x - 2, y + 1))
 
         # x Haut droite
-        elif (self._x + 2) < len(plateau) and (self._y - 1) >= 0:
+        if (x + 2) < len(plateau) and (y - 1) >= 0:
             # Vérifie si la case est disponible
-            if plateau[self._x + 2][self._y - 1] == 0:
-                return True
-            else:
-                return False
+            if plateau[x + 2][y - 1] == 0:
+                possible.append((x + 2, y - 1))
 
         # x Bas droite
-        elif (self._x + 2) < len(plateau) and (self._y + 1) < len(plateau):
+        if (x + 2) < len(plateau) and (y + 1) < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self._x + 2][self._y + 1] == 0:
-                return True
-            else:
-                return False
+            if plateau[x + 2][y + 1] == 0:
+                possible.append((x + 2, y + 1))
 
         # y Haut gauche
-        elif (self._x - 1) >= 0 and (self._y - 2) >= 0:
+        if (x + 1) < len(plateau) and (y + 2) < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self._x - 1][self._y - 2] == 0:
-                return True
-            else:
-                return False
+            if plateau[x + 1][y + 2] == 0:
+                possible.append((x + 1, y + 2))
 
         # y Bas gauche
-        elif (self._x - 1) >= 0 and (self._y + 2) < len(plateau):
+        if (x + 1) < len(plateau) and (y - 2) >= 0:
             # Vérifie si la case est disponible
-            if plateau[self._x - 1][self._y + 2] == 0:
-                return True
-            else:
-                return False
+            if plateau[x + 1][y - 2] == 0:
+                possible.append((x + 1, y - 2))
 
         # y Haut droite
-        elif (self._x + 1) < len(plateau) and (self._y - 2) >= 0:
+        if (x - 1) >= 0 and (y + 2) < len(plateau):
             # Vérifie si la case est disponible
-            if plateau[self._x + 1][self._y - 2] == 0:
-                return True
-            else:
-                return False
+            if plateau[x - 1][y + 2] == 0:
+                possible.append((x - 1, y + 2))
 
         # y Bas droite
 
-        elif (self._x + 1) < len(plateau) and (self._y + 2) < len(plateau):
+        if (x - 1) >= 0 and (y - 2) >= 0:
             # Vérifie si la case est disponible
-            if plateau[self._x + 1][self._y + 2] == 0:
-                return True
-            else:
-                return False
-        else:
-            return False
+            if plateau[x - 1][y - 2] == 0:
+                possible.append((x - 1, y - 2))
+
+        return possible
 
     def placement_pion(self, plateau, x, y, joueur):
         """
         Permet de placer un pion selon le joueur et si le déplaceent est possible au vu des règles du jeu sur la case sélectionnée.
         """
-        self._x = x
-        self._y = y
-        if self.cases_possibles(plateau, self._y, self._x) is True:
+        if self._tour <= 1:
             if joueur == 1:
-                plateau[self._x][self._y] = 1
+                plateau[x][y] = 1
             elif joueur == 2:
-                plateau[self._x][self._y] = 2
+                plateau[x][y] = 2
+            return True
+        else:
+            self._possible = self.cases_possibles(plateau, x, y)
+            if self._possible == []:
+                print("Joueur ", self._joueur, " Win !!!")
+
+            print(x, y)
+            print(self._possible)
+
+            if (self._x, self._y) in self._possible:
+                print(self._possible)
+                print(x, y)
+                if joueur == 1:
+                    plateau[x][y] = 1
+                elif joueur == 2:
+                    plateau[x][y] = 2
+                return True
+            return False
 
     def placement_croix(self, x, y, plateau):
         if plateau[x][y] == 1:
@@ -187,7 +187,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i][j - 1] == pion_du_joueur:
+                if 0 <= self._board[i][j - 1] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -198,7 +198,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i][j + 1] == pion_du_joueur:
+                if 0 <= self._board[i][j + 1] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -209,7 +209,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j] == pion_du_joueur:
+                if 0 <= self._board[i - 1][j] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -220,7 +220,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j] == pion_du_joueur:
+                if 0 <= self._board[i + 1][j] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -231,7 +231,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j - 1] == pion_du_joueur:
+                if 0 <= self._board[i + 1][j - 1] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -242,7 +242,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j - 1] == pion_du_joueur:
+                if 0 <= self._board[i - 1][j - 1] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -253,7 +253,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i + 1][j + 1] == pion_du_joueur:
+                if 0 <= self._board[i + 1][j + 1] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -264,7 +264,7 @@ class Jeu:
         alignement = 1
         if self._board[i][j] == pion_du_joueur:
             while alignement != self.get_nombre_de_pions_a_aligner():
-                if self._board[i - 1][j + 1] == pion_du_joueur:
+                if 0 <= self._board[i - 1][j + 1] < self.get_board_size() == pion_du_joueur:
                     alignement += 1
                 else:
                     break
@@ -275,12 +275,11 @@ class Jeu:
         """
         Verifie si le nombre de pions a aligner le sont.
         """
-        self._x = x
-        self._y = y
         if self._tour % 2 == 0:
             pion_du_joueur = 3
         else:
             pion_du_joueur = 4
+
         for i in range(self._board_size):
             for j in range(self._board_size):
 
@@ -295,7 +294,7 @@ class Jeu:
                         self.verif_diagbasdroit(i, j, pion_du_joueur)
 
                 # Coin Haut Doite
-                if i == self._board_size:
+                elif i == self._board_size:
                     if j == 0:
                         # Gauche
                         self.verif_diaghautdroit(i, j, pion_du_joueur)
@@ -305,7 +304,7 @@ class Jeu:
                         self.verif_diagbasgauche(i, j, pion_du_joueur)
 
                 # Coin Bas Gauche
-                if i == 0:
+                elif i == 0:
                     if j == self._board_size:
                         # Droite
                         self.verif_droite(i, j, pion_du_joueur)
@@ -315,7 +314,7 @@ class Jeu:
                         self.verif_diaghautdroit(i, j, pion_du_joueur)
 
                 # Coin Bas Doite
-                if i == self._board_size:
+                elif i == self._board_size:
                     if j == self._board_size:
                         # Gauche
                         self.verif_gauche(i, j, pion_du_joueur)
@@ -325,7 +324,7 @@ class Jeu:
                         self.verif_diaghautgauche(i, j, pion_du_joueur)
 
                 # Ligne Haut
-                if j == 0:
+                elif j == 0:
                     # Gauche
                     self.verif_gauche(i, j, pion_du_joueur)
                     # Bas
@@ -338,7 +337,7 @@ class Jeu:
                     self.verif_diagbasgauche(i, j, pion_du_joueur)
 
                 # Ligne Gauche
-                if i == 0:
+                elif i == 0:
                     # Bas
                     self.verif_bas(i, j, pion_du_joueur)
                     # Haut
@@ -351,7 +350,7 @@ class Jeu:
                     self.verif_diaghautdroit(i, j, pion_du_joueur)
 
                 # Ligne Bas
-                if j == self._board_size:
+                elif j == self._board_size:
                     # Haut
                     self.verif_haut(i, j, pion_du_joueur)
                     # Droite
@@ -364,7 +363,7 @@ class Jeu:
                     self.verif_diaghautgauche(i, j, pion_du_joueur)
 
                 # Ligne Droite
-                if i == self._board_size:
+                elif i == self._board_size:
                     # Haut
                     self.verif_haut(i, j, pion_du_joueur)
                     # Gauche
@@ -395,12 +394,14 @@ class Jeu:
         pion1x, pion1y = self._pion1.get_coordonneex(), self._pion1.get_coordonneey()
         pion2x, pion2y = self._pion2.get_coordonneex(), self._pion2.get_coordonneey()
         print("pion 1", pion1x, pion1y)
-        print("pion 2",  pion2x, pion2y)
+        print("pion 2", pion2x, pion2y)
 
         # Si la case choisie n'est pas une case où l'on peut mettre le pion (plus le cases disponibles) alors, la partie se termine.
-        if self.cases_possibles(self._board, pion1x, pion1y) is False or self.cases_possibles(self._board, pion2x, pion2y) is False:
+        if self.placement_pion(self._plateau, pion1x, pion1y, self._joueur) is False or self.placement_pion(
+                self._plateau, pion2x, pion2y, self._joueur) is False:
             return True
-        elif self.verif_alignement(pion1x, pion1y) is True or self.verif_alignement(pion2x, pion2y) is True and tour > 1:
+        elif self.verif_alignement(pion1x, pion1y) is True or self.verif_alignement(pion2x,
+                                                                                    pion2y) is True and tour > 1:
             return True
         else:
             return False
@@ -446,51 +447,46 @@ class Gui(Jeu, Pion):
         """
         Affiche les pions.
         """
-        self._x = x
-        self._y = y
-
         if self._joueur == 1:
             for item in self._canvas.find_withtag("pion1"):
                 self._canvas.delete(item)
-            self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
-                                     (self._y + 1) * self._taille_case + 2 + 3,
-                                     (self._x + 1) * self._taille_case + self._taille_case + 2 - 3,
-                                     (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="blue", tags='pion1')
-            self._plateau[self._y][self._x] = 1
+            self._canvas.create_oval((x + 1) * self._taille_case + 2 + 3,
+                                     (y + 1) * self._taille_case + 2 + 3,
+                                     (x + 1) * self._taille_case + self._taille_case + 2 - 3,
+                                     (y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="blue", tags='pion1')
+            self._plateau[x][y] = 1
 
         elif self._joueur == 2:
             for item in self._canvas.find_withtag("pion2"):
                 self._canvas.delete(item)
-            self._canvas.create_oval((self._x + 1) * self._taille_case + 2 + 3,
-                                     (self._y + 1) * self._taille_case + 2 + 3,
-                                     (self._x + 1) * self._taille_case + self._taille_case + 2 - 3,
-                                     (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red", tags='pion2')
-            self._plateau[self._y][self._x] = 2
+            self._canvas.create_oval((x + 1) * self._taille_case + 2 + 3,
+                                     (y + 1) * self._taille_case + 2 + 3,
+                                     (x + 1) * self._taille_case + self._taille_case + 2 - 3,
+                                     (y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red", tags='pion2')
+            self._plateau[x][y] = 2
 
     def affichage_croix(self, x, y):
-        self._x = y
-        self._y = x
-        if self._plateau[self._x][self._y] == 3:
-            self._canvas.create_line((self._x + 1) * self._taille_case,
-                                     (self._y + 1) * self._taille_case,
-                                     (self._x + 1) * self._taille_case + self._taille_case,
-                                     (self._y + 1) * self._taille_case + self._taille_case, fill="blue",
+        if self._plateau[x][y] == 3:
+            self._canvas.create_line((x + 1) * self._taille_case,
+                                     (y + 1) * self._taille_case,
+                                     (x + 1) * self._taille_case + self._taille_case,
+                                     (y + 1) * self._taille_case + self._taille_case, fill="blue",
                                      width=5)
-            self._canvas.create_line((self._x + 2) * self._taille_case - self._taille_case,
-                                     (self._y + 1) * self._taille_case + self._taille_case,
-                                     (self._x + 2) * self._taille_case,
-                                     (self._y + 1) * self._taille_case, fill="blue", width=5)
+            self._canvas.create_line((x + 2) * self._taille_case - self._taille_case,
+                                     (y + 1) * self._taille_case + self._taille_case,
+                                     (x + 2) * self._taille_case,
+                                     (y + 1) * self._taille_case, fill="blue", width=5)
 
-        elif self._plateau[self._x][self._y] == 4:
-            self._canvas.create_line((self._x + 1) * self._taille_case,
-                                     (self._y + 1) * self._taille_case,
-                                     (self._x + 1) * self._taille_case + self._taille_case,
-                                     (self._y + 1) * self._taille_case + self._taille_case, fill="red",
+        elif self._plateau[x][y] == 4:
+            self._canvas.create_line((x + 1) * self._taille_case,
+                                     (y + 1) * self._taille_case,
+                                     (x + 1) * self._taille_case + self._taille_case,
+                                     (y + 1) * self._taille_case + self._taille_case, fill="red",
                                      width=5)
-            self._canvas.create_line((self._x + 2) * self._taille_case - self._taille_case,
-                                     (self._y + 1) * self._taille_case + self._taille_case,
-                                     (self._x + 2) * self._taille_case,
-                                     (self._y + 1) * self._taille_case, fill="red", width=5)
+            self._canvas.create_line((x + 2) * self._taille_case - self._taille_case,
+                                     (y + 1) * self._taille_case + self._taille_case,
+                                     (x + 2) * self._taille_case,
+                                     (y + 1) * self._taille_case, fill="red", width=5)
 
     def boucle_jeu(self, event):
         """
@@ -498,80 +494,52 @@ class Gui(Jeu, Pion):
         """
 
         case = (((event.x - 50) // self._taille_case), ((event.y - 50) // self._taille_case))
-        self._x = case[1]
-        self._y = case[0]
+
         if self._tour % 2 == 0:
             self._joueur = 1
+            anciennes_cos_x = self._pion1.get_coordonneex()
+            anciennes_cos_y = self._pion1.get_coordonneey()
         else:
             self._joueur = 2
-        print("JESHDHQGZZZZZZZZZZZZZZZZZQJHSBBBBBBBBBBBBBBBBB", self._joueur)
+            anciennes_cos_x = self._pion2.get_coordonneex()
+            anciennes_cos_y = self._pion2.get_coordonneey()
+
+        self._x = case[0]
+        self._y = case[1]
+
+        print("joueur : ", self._joueur)
         if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size():
-            if self._tour < 2:
-                if self._joueur == 1:
-                    self.placement_pion(self._plateau, self._y, self._x, 1)
-                    self._pion1.set_coordoneex(self._x)
-                    self._pion1.set_coordoneey(self._y)
-                    anciennes_cos_pion_1x = self._pion1.get_coordonneex()
-                    anciennes_cos_pion_1y = self._pion1.get_coordonneey()
-                    print("j1 coos croix tour 0 : ", anciennes_cos_pion_1x, anciennes_cos_pion_1y)
-                    self.affichage_rond(anciennes_cos_pion_1y, anciennes_cos_pion_1x)
-                    self.placement_croix(self._y, self._x, self._plateau)
-                    print(*self._plateau, sep="\n")
-                    self._tour += 1
-                    return
+            print("new coord :", self._x, self._y)
+            print("anciennes_cos_x :", anciennes_cos_x, anciennes_cos_y)
+            if self._tour > 1:
+                if self.placement_pion(self._plateau, anciennes_cos_x, anciennes_cos_y, self._joueur) is True:
+                    self.affichage_rond(self._x, self._y)
+                    self.placement_croix(anciennes_cos_x, anciennes_cos_y, self._plateau)
+                    self.affichage_croix(anciennes_cos_x, anciennes_cos_y)
 
-                elif self._joueur == 2:
-                    self.placement_pion(self._plateau, self._y, self._x, 2)
-                    self._pion2.set_coordoneex(self._x)
-                    self._pion2.set_coordoneey(self._y)
-                    anciennes_cos_pion_2x = self._pion2.get_coordonneex()
-                    anciennes_cos_pion_2y = self._pion2.get_coordonneey()
-                    print("j2 coos croix tour 1 : ", anciennes_cos_pion_2x, anciennes_cos_pion_2y)
-                    self.affichage_rond(anciennes_cos_pion_2y, anciennes_cos_pion_2x)
-                    self.placement_croix(self._y, self._x, self._plateau)
-                    print(*self._plateau, sep="\n")
-                    self._tour += 1
-                    return
-
-            elif self._tour >= 2:
-                if self._joueur == 1:
-                    if self.cases_possibles(self._plateau, self._x, self._y) is True:
-                        print("j1", self._x, self._y)
+                    if self._joueur == 1:
                         self._pion1.set_coordoneex(self._x)
                         self._pion1.set_coordoneey(self._y)
-                        anciennes_cos_pion_1x = self._pion1.get_coordonneex()
-                        anciennes_cos_pion_1y = self._pion1.get_coordonneey()
-                        print("j1 coos croix : ", anciennes_cos_pion_1x, anciennes_cos_pion_1y)
-                        self.placement_pion(self._plateau, self._y, self._x, 1)
-                        self.affichage_rond(self._y, self._x)
-                        self.placement_croix(anciennes_cos_pion_1y, anciennes_cos_pion_1x, self._plateau)
-                        self.affichage_croix(anciennes_cos_pion_1y, anciennes_cos_pion_1x)
-
-                        print(*self._plateau, sep="\n")
-                        print("Tour passant par j1: ", self._tour)
-                        self._joueur = 2
-                        self._tour += 1
-                    return
-
-                else:
-                    if self.cases_possibles(self._plateau, self._x, self._y) is True:
-                        print("je passe la")
-                        print("j2 cos self : ", self._x, self._y)
+                    elif self._joueur == 2:
                         self._pion2.set_coordoneex(self._x)
                         self._pion2.set_coordoneey(self._y)
-                        anciennes_cos_pion_2x = self._pion2.get_coordonneex()
-                        anciennes_cos_pion_2y = self._pion2.get_coordonneey()
-                        print("j2 coos croix : ", anciennes_cos_pion_2x, anciennes_cos_pion_2y)
-                        self.placement_pion(self._plateau, self._y, self._x, 2)
-                        self.affichage_rond(self._x, self._y)
-                        self.placement_croix(anciennes_cos_pion_2y, anciennes_cos_pion_2x, self._plateau)
-                        self.affichage_croix(anciennes_cos_pion_2y, anciennes_cos_pion_2x)
 
-                        print(*self._plateau, sep="\n")
-                        print("Tour passant pat j2: ", self._tour)
-                        self._joueur = 1
-                        self._tour += 1
-                    return
+                    print(*self._plateau, sep="\n")
+                    self._tour += 1
+
+            else:
+                self.placement_pion(self._plateau, self._x, self._y, self._joueur)
+                self.affichage_rond(self._x, self._y)
+
+                if self._joueur == 1:
+                    self._pion1.set_coordoneex(self._x)
+                    self._pion1.set_coordoneey(self._y)
+                elif self._joueur == 2:
+                    self._pion2.set_coordoneex(self._x)
+                    self._pion2.set_coordoneey(self._y)
+
+                print(*self._plateau, sep="\n")
+                self._tour += 1
 
         if self.end_of_game(self._tour) is True:
             return f"Joueur {self._joueur} a gagné !"
