@@ -163,7 +163,6 @@ class Jeu:
             else:
                 return False
 
-
     def placement_pion(self, plateau, x, y, joueur):
         """
         Permet de placer un pion selon le joueur et si le déplaceent est possible au vu des règles du jeu sur la case sélectionnée.
@@ -176,11 +175,11 @@ class Jeu:
             elif joueur == 2:
                 plateau[self._x][self._y] = 2
 
-    def placement_croix(self, i, j, plateau):
-        if plateau[i][j] == 1:
-            plateau[i][j] = 3
-        elif plateau[i][j] == 2:
-            plateau[i][j] = 4
+    def placement_croix(self, x, y, plateau):
+        if plateau[x][y] == 1:
+            plateau[x][y] = 3
+        elif plateau[x][y] == 2:
+            plateau[x][y] = 4
 
     def verif_haut(self, i, j, pion_du_joueur):
         alignement = 1
@@ -458,7 +457,6 @@ class Gui(Jeu, Pion):
             self._tour += 1
             self._plateau[self._y][self._x] = 1
 
-
         elif self._tour % 2 != 0:
             for item in self._canvas.find_withtag("pion2"):
                 self._canvas.delete(item)
@@ -468,8 +466,6 @@ class Gui(Jeu, Pion):
                                      (self._y + 1) * self._taille_case + self._taille_case + 2 - 3, fill="red", tags='pion2')
             self._tour += 1
             self._plateau[self._y][self._x] = 2
-
-
 
     def affichage_croix(self, x, y):
         self._x = y
@@ -502,20 +498,15 @@ class Gui(Jeu, Pion):
         """
         Fonction qui permet au jeu de fonctionner selon les règles, le déroulement du jeu.
         """
-        if self.end_of_game(self._tour) is False:
-            None
-        else:
+        if self.end_of_game(self._tour) is True:
             return f"Joueur {self._joueur} a gagné !"
 
-        tempX = event.x # j'ai rajouter ces trois lignes pour inverser les axes
+        temp_x = event.x
         event.x = event.y
-        event.y = tempX
+        event.y = temp_x
         case = (((event.x - 50) // self._taille_case), ((event.y - 50) // self._taille_case))
         self._x = case[0]
         self._y = case[1]
-        pion_1x, pion_1y = 0, 0
-        pion_2y, pion_2y = 0, 0
-
 
         if 0 <= self._x < self.get_board_size() and 0 <= self._y < self.get_board_size():
             if self._tour < 2:
@@ -544,13 +535,12 @@ class Gui(Jeu, Pion):
                     self.affichage_croix(ancien2[1], ancien2[0])
                     print(*self._plateau, sep="\n")
                     return ancien2
-            else :
+            else:
                 if self._tour % 2 == 0:
                     self._joueur = 1
                     print("on va a", self._x, self._y)
                     pion_1x = self._pion1.get_coordonneex()
                     pion_1y = self._pion1.get_coordonneey()
-                    ancien1 = (pion_1x, pion_1y)
                     self.placement_pion(self._plateau, self._y, self._x, 1)
                     self.placement_croix(pion_1x, pion_1y, self._plateau)
                     self.affichage_rond(self._x, self._y, self._tour)
@@ -564,7 +554,6 @@ class Gui(Jeu, Pion):
                     print("on va a", self._x, self._y)
                     pion_2x = self._pion2.get_coordonneex()
                     pion_2y = self._pion2.get_coordonneey()
-                    ancien2 = (pion_2x, pion_2y)
                     self.placement_pion(self._plateau, case[1], case[0], 2)
                     self.placement_croix(pion_2x, pion_2y, self._plateau)
                     self.affichage_rond(self._x, self._y, self._tour)
@@ -572,7 +561,6 @@ class Gui(Jeu, Pion):
                     print(*self._plateau, sep="\n")
                     print(self._tour)
                     return
-
 
 
 Gui(600, 600)
